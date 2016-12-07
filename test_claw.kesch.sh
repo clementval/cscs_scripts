@@ -48,14 +48,23 @@ case  "$CLAW_BASE_COMPILER" in
   "gnu")
     module rm PrgEnv-pgi && module rm PrgEnv-cray
     module load PrgEnv-gnu
+    CLAW_FC=gfortran
+    CLAW_CC=gcc
+    CLAW_CXX=g++
   ;;
   "pgi")
     module rm PrgEnv-gnu && module rm PrgEnv-cray
     module load PrgEnv-pgi
+    CLAW_FC=mpif90
+    CLAW_CC=mpicc
+    CLAW_CXX=pgc++
   ;;
   "cray")
     module rm PrgEnv-pgi && module rm PrgEnv-gnu
     module load PrgEnv-cray
+    CLAW_FC=ftn
+    CLAW_CC=cc
+    CLAW_CXX=CC
   ;;
   *)
     echo "Error: Unknown compiler ..."
@@ -74,10 +83,7 @@ git submodule init
 git submodule update --remote
 
 # Configure using cmake
-#FC=gfortran CC=gcc CXX=g++ cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR .
-#FC=pgf90 CC=pgcc CXX=pgc++ cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR .
-FC=mpif90 CC=mpicc CXX=pgc++ cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_DIR .
-#FC=ftn cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DOMNI_CONF_OPTION=--target=Cray-linux-gnu .
+FC=$CLAW_FC CC=$CLAW_CC CXX=$CLAW_CXX cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_DIR .
 
 # Compile and test
 make all transformation test
