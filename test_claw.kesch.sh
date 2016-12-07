@@ -8,8 +8,9 @@ CLAW_FORK_REPO="git@github.com:clementval/claw-compiler.git"
 CLAW_REPO=$CLAW_MAIN_REPO
 CLAW_TEST_DIR=buildtemp-claw
 CLAW_INSTALL_DIR=$PWD/$TEST_DIR/install
+CLAW_BASE_COMPILER="gnu"
 
-while getopts "hfb:" opt; do
+while getopts "hfb:c:" opt; do
   case "$opt" in
   h)
     show_help
@@ -21,18 +22,45 @@ while getopts "hfb:" opt; do
   b)  
     CLAW_BRANCH=$OPTARG
     ;;
+  c)  
+    CLAW_BASE_COMPILER=$OPTARG
+    ;;
   esac
 done
 
+echo ""
 echo "CLAW FORTRAN Compiler full tests"
 echo "================================"
 echo "- Repo: $CLAW_REPO"
 echo "- Branch: $CLAW_BRANCH"
+echo "- Base compiler: $CLAW_BASE_COMPILER"
 echo "- Dest dir: $CLAW_TEST_DIR" 
 echo "- Dest dir: $CLAW_INSTALL_DIR" 
+echo "================================"
+echo ""
+
 
 # Load recent version of cmake
 module load cmake
+
+# Load correct PrgEnv
+case  "$CLAW_BASE_COMPILER" in
+  "gnu")
+    module rm PrgEnv-pgi && module rm PrgEnv-cray
+    module load PrgEnv-gnu
+  ;;
+  "pgi")
+    module rm PrgEnv-gnu && module rm PrgEnv-cray
+    module load PrgEnv-pgi
+  ;;
+  "cray")
+    module rm PrgEnv-pgi && module rm PrgEnv-gnu
+    module load PrgEnv-cray
+  ;;
+  *)
+    echo "Error: Unknown compiler ..."
+    exit 1
+esac
 
 # Prepare directory
 rm -rf $CLAW_TEST_DIR
