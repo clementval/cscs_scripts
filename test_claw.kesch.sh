@@ -1,6 +1,15 @@
 #!/bin/bash 
 
 
+function show_help(){
+  echo "$0 [-b <branch-name>] [-f] [-c gnu|pgi|cray]"
+  echo ""
+  echo "Options:"
+  echo " -b <branch-name>  Specifiy the branch to be tested"
+  echo " -f                Use the forked repository for test"
+  echo " -c <compiler-id>  Define the base compiler to use"
+}
+
 # Define local variable
 CLAW_BRANCH="master"
 CLAW_MAIN_REPO="git@github.com:C2SM-RCM/claw-compiler.git"
@@ -27,6 +36,7 @@ while getopts "hfb:c:" opt; do
     ;;
   esac
 done
+
 
 echo ""
 echo "CLAW FORTRAN Compiler full tests"
