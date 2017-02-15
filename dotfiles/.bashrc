@@ -25,6 +25,10 @@ then
   then 
     module load daint-gpu
     module load CMake
+    module load java
+
+    export ANT_HOME="/scratch/snx3000/clementv/apache-ant-1.10.1"
+    export PATH=$PATH:$ANT_HOME/bin
   fi
 
   module load git
