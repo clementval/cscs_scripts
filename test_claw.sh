@@ -37,10 +37,23 @@ while getopts "hfb:c:" opt; do
   esac
 done
 
+COMPUTER=$(hostname)
+
+if [[ $COMPUTER == *"daint"* ]]
+then
+  COMPUTER="daint"
+  CMAKE_MOD="CMake"
+elif [[ $COMPUTER == *"kesch"* ]]
+then
+  COMPUTER="kesch"
+  CMAKE_MOD="cmake"
+fi
+
 
 echo ""
 echo "CLAW FORTRAN Compiler full tests"
 echo "================================"
+echo "- Computer: $COMPUTER"
 echo "- Repo: $CLAW_REPO"
 echo "- Branch: $CLAW_BRANCH"
 echo "- Base compiler: $CLAW_BASE_COMPILER"
@@ -51,7 +64,7 @@ echo ""
 
 
 # Load recent version of cmake
-module load cmake
+module load $CMAKE_MOD
 
 # Load correct PrgEnv
 case  "$CLAW_BASE_COMPILER" in
