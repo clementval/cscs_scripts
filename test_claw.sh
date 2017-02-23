@@ -78,9 +78,17 @@ case  "$CLAW_BASE_COMPILER" in
   "pgi")
     module rm PrgEnv-gnu && module rm PrgEnv-cray
     module load PrgEnv-pgi
-    CLAW_FC=mpif90
-    CLAW_CC=mpicc
-    CLAW_CXX=pgc++
+    if [[ $COMPUTER == "kesch" ]]
+    then 
+      CLAW_FC=mpif90
+      CLAW_CC=mpicc
+      CLAW_CXX=pgc++
+    else 
+      module load gcc
+      CLAW_FC=ftn
+      CLAW_CC=gcc
+      CLAW_CXX=g++
+    fi
   ;;
   "cray")
     module rm PrgEnv-pgi && module rm PrgEnv-gnu
