@@ -59,9 +59,20 @@ case  "$CLAW_BASE_COMPILER" in
   "gnu")
     module rm PrgEnv-pgi && module rm PrgEnv-cray
     module load PrgEnv-gnu
-    CLAW_FC=gfortran
-    CLAW_CC=gcc
-    CLAW_CXX=g++
+    if [[ $COMPUTER == "kesch" ]]
+    then 
+      CLAW_FC=gfortran
+      CLAW_CC=gcc
+      CLAW_CXX=g++
+    elif [[ $COMPUTER == "daint" ]]
+    then
+      CLAW_FC=ftn
+      CLAW_CC=cc
+      CLAW_CXX=CC
+      OMNI_MPI_CC="MPI_CC=cc" 
+      OMNI_MPI_FC="MPI_FC=ftn"
+      ADDITONAL_OPTIONS="-DOMNI_MPI_CC=$OMNI_MPI_CC -DOMNI_MPI_FC=$OMNI_MPI_FC"
+    fi
   ;;
   "pgi")
     module rm PrgEnv-gnu && module rm PrgEnv-cray
@@ -71,7 +82,8 @@ case  "$CLAW_BASE_COMPILER" in
       CLAW_FC=mpif90
       CLAW_CC=mpicc
       CLAW_CXX=pgc++
-    else 
+    elif [[ $COMPUTER == "daint" ]]
+    then
       module load gcc
       CLAW_FC=ftn
       CLAW_CC=cc
