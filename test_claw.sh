@@ -50,18 +50,6 @@ then
 fi
 
 
-echo ""
-echo "CLAW FORTRAN Compiler full tests"
-echo "================================"
-echo "- Computer: $COMPUTER"
-echo "- Repo: $CLAW_REPO"
-echo "- Branch: $CLAW_BRANCH"
-echo "- Base compiler: $CLAW_BASE_COMPILER"
-echo "- Dest dir: $CLAW_TEST_DIR" 
-echo "- Dest dir: $CLAW_INSTALL_DIR" 
-echo "================================"
-echo ""
-
 
 # Load recent version of cmake
 module load $CMAKE_MOD
@@ -88,6 +76,7 @@ case  "$CLAW_BASE_COMPILER" in
       CLAW_FC=ftn
       CLAW_CC=cc
       CLAW_CXX=CC
+      OMNI_CONF_OPTION="MPI_CC=cc MPI_FC=ftn"
     fi
   ;;
   "cray")
@@ -102,6 +91,24 @@ case  "$CLAW_BASE_COMPILER" in
     exit 1
 esac
 
+echo ""
+echo "CLAW FORTRAN Compiler full tests"
+echo "================================"
+echo "- Computer: $COMPUTER"
+echo "- Repo: $CLAW_REPO"
+echo "- Branch: $CLAW_BRANCH"
+echo "- Base compiler: $CLAW_BASE_COMPILER"
+echo "  - FC : $CLAW_FC"
+echo "  - CC : $CLAW_CC"
+echo "  - CXX: $CLAW_CXX"
+echo "- OMNI Compiler option: $OMNI_CONF_OPTION"
+echo "- Dest dir: $CLAW_TEST_DIR" 
+echo "- Dest dir: $CLAW_INSTALL_DIR" 
+echo "================================"
+echo ""
+
+
+
 # Prepare directory
 rm -rf $CLAW_TEST_DIR
 mkdir $CLAW_TEST_DIR
@@ -114,7 +121,7 @@ git submodule init
 git submodule update --remote
 
 # Configure using cmake
-FC=$CLAW_FC CC=$CLAW_CC CXX=$CLAW_CXX cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_DIR .
+FC=$CLAW_FC CC=$CLAW_CC CXX=$CLAW_CXX cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_DIR -DOMNI_CONF_OPTION=$OMNI_CONF_OPTION .
 
 # Compile and test
 make all transformation test
