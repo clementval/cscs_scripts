@@ -20,7 +20,7 @@ git submodule init
 git submodule update --remote 
 
 # Install path by computer and compiler
-CLAW_INSTALL_PATH=/project/c01/install/$slave/$compiler/claw
+CLAW_INSTALL_PATH=/project/c01/install/$slave/claw/$compiler
 
 
 if [ "$compiler" == "gnu" ]
