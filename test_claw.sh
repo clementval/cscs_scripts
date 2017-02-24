@@ -16,7 +16,7 @@ CLAW_MAIN_REPO="git@github.com:C2SM-RCM/claw-compiler.git"
 CLAW_FORK_REPO="git@github.com:clementval/claw-compiler.git"
 CLAW_REPO=$CLAW_MAIN_REPO
 CLAW_TEST_DIR=buildtemp-claw
-CLAW_INSTALL_DIR=$PWD/$TEST_DIR/install
+CLAW_INSTALL_DIR=$PWD/$CLAW_TEST_DIR/install
 CLAW_BASE_COMPILER="gnu"
 
 while getopts "hfb:c:" opt; do
