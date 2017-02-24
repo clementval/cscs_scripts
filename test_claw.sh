@@ -86,8 +86,8 @@ case  "$CLAW_BASE_COMPILER" in
     else 
       module load gcc
       CLAW_FC=ftn
-      CLAW_CC=gcc
-      CLAW_CXX=g++
+      CLAW_CC=cc
+      CLAW_CXX=CC
     fi
   ;;
   "cray")
