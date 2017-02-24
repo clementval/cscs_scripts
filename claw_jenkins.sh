@@ -26,7 +26,15 @@ CLAW_INSTALL_PATH=/project/c01/install/$slave/$compiler/claw
 if [ "$compiler" == "gnu" ]
 then
   module load PrgEnv-gnu
-  FC=gfortran cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
+  if [ "$slave" == "kesch" ]
+  then  
+    FC=gfortran cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
+  elif [ "$slave" == "daint" ]
+  then
+    module load cudatoolkit
+    # On Daint the cray wrapper must be used regardless the compiling env.
+	FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
+  fi
 elif [ "$compiler" == "pgi" ]
 then
   module load PrgEnv-pgi
@@ -51,9 +59,4 @@ then
 fi
 
 # Compile and run unit tests
-make all transformation test && make install 
-
-
-
-
-
+make all transformation test && make install
