@@ -76,7 +76,9 @@ case  "$CLAW_BASE_COMPILER" in
       CLAW_FC=ftn
       CLAW_CC=cc
       CLAW_CXX=CC
-      OMNI_CONF_OPTION="MPI_CC=cc MPI_FC=ftn"
+      OMNI_MPI_CC="MPI_CC=cc" 
+      OMNI_MPI_FC="MPI_FC=ftn"
+      ADDITONAL_OPTIONS="-DOMNI_MPI_CC=$OMNI_MPI_CC -DOMNI_MPI_FC=$OMNI_MPI_FC"
     fi
   ;;
   "cray")
@@ -101,7 +103,8 @@ echo "- Base compiler: $CLAW_BASE_COMPILER"
 echo "  - FC : $CLAW_FC"
 echo "  - CC : $CLAW_CC"
 echo "  - CXX: $CLAW_CXX"
-echo "- OMNI Compiler option: $OMNI_CONF_OPTION"
+echo "- OMNI MPI CC: $OMNI_MPI_CC"
+echo "- OMNI MPI FC: $OMNI_MPI_FC"
 echo "- Dest dir: $CLAW_TEST_DIR" 
 echo "- Dest dir: $CLAW_INSTALL_DIR" 
 echo "================================"
@@ -121,7 +124,7 @@ git submodule init
 git submodule update --remote
 
 # Configure using cmake
-FC=$CLAW_FC CC=$CLAW_CC CXX=$CLAW_CXX cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_DIR -DOMNI_CONF_OPTION=$OMNI_CONF_OPTION .
+FC=$CLAW_FC CC=$CLAW_CC CXX=$CLAW_CXX cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_DIR $ADDITONAL_OPTIONS .
 
 # Compile and test
 make all transformation test
