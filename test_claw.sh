@@ -1,6 +1,12 @@
 #!/bin/bash 
 
 
+#
+# This scripts helps to test the compilation and tests execution of the 
+# CLAW compiler on Piz Kesch and Piz Daint at CSCS.
+#
+
+
 function show_help(){
   echo "$0 [-b <branch-name>] [-f] [-c gnu|pgi|cray]"
   echo ""
