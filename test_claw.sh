@@ -8,12 +8,13 @@
 
 
 function show_help(){
-  echo "$0 [-b <branch-name>] [-f] [-c gnu|pgi|cray]"
+  echo "$0 [-b <branch-name>] [-f] [-c gnu|pgi|cray] [-i <install-path>]"
   echo ""
   echo "Options:"
   echo " -b <branch-name>  Specifiy the branch to be tested"
   echo " -f                Use the forked repository for test"
   echo " -c <compiler-id>  Define the base compiler to use"
+  echo " -i <install-path> Set an install path"
 }
 
 # Define local variable
@@ -25,7 +26,7 @@ CLAW_TEST_DIR=buildtemp-claw
 CLAW_INSTALL_DIR=$PWD/$CLAW_TEST_DIR/install
 CLAW_BASE_COMPILER="gnu"
 
-while getopts "hfb:c:" opt; do
+while getopts "hfb:c:i:" opt; do
   case "$opt" in
   h)
     show_help
@@ -39,6 +40,9 @@ while getopts "hfb:c:" opt; do
     ;;
   c)  
     CLAW_BASE_COMPILER=$OPTARG
+    ;;
+  i)
+    CLAW_INSTALL_DIR=$OPTARG
     ;;
   esac
 done
@@ -118,13 +122,13 @@ echo "- Computer: $COMPUTER"
 echo "- Repo: $CLAW_REPO"
 echo "- Branch: $CLAW_BRANCH"
 echo "- Base compiler: $CLAW_BASE_COMPILER"
+echo "- Install path: $CLAW_INSTALL_DIR"
 echo "  - FC : $CLAW_FC"
 echo "  - CC : $CLAW_CC"
 echo "  - CXX: $CLAW_CXX"
 echo "- OMNI MPI CC: $OMNI_MPI_CC"
 echo "- OMNI MPI FC: $OMNI_MPI_FC"
 echo "- Dest dir: $CLAW_TEST_DIR" 
-echo "- Dest dir: $CLAW_INSTALL_DIR" 
 echo "================================"
 echo ""
 
@@ -146,4 +150,4 @@ FC=$CLAW_FC CC=$CLAW_CC CXX=$CLAW_CXX cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL
 
 # Compile and test
 make all transformation test
-
+make install
