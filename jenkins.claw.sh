@@ -56,12 +56,13 @@ then
   if [ "$slave" == "kesch" ]
   then
     module load GCC
+    FC=ftn cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
   elif [ "$slave" == "daint" ]
   then
     module load daint-gpu
     module load libxml2/.2.9.4-CrayGNU-2016.11-Python-2.7.12 # Hidden module for workaround
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
   fi
-  FC=ftn cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
 fi
 
 # Compile and run unit tests
