@@ -24,6 +24,7 @@ CLAW_INSTALL_PATH=/project/c01/install/$slave/claw/$compiler
 
 if [ "$compiler" == "gnu" ]
 then
+  module rm PrgEnv-pgi && module rm PrgEnv-cray
   module load PrgEnv-gnu
   if [ "$slave" == "kesch" ]
   then
@@ -36,6 +37,7 @@ then
   fi
 elif [ "$compiler" == "pgi" ]
 then
+  module rm PrgEnv-gnu && module rm PrgEnv-cray
   module load PrgEnv-pgi
   if [ "$slave" == "kesch" ]
   then
@@ -49,15 +51,15 @@ then
   fi
 elif [ "$compiler" == "cray" ]
 then
+  module rm PrgEnv-pgi && module rm PrgEnv-gnu
   module load PrgEnv-cray
   if [ "$slave" == "kesch" ]
   then
     module load GCC
-  elif [ "$slave" == "daint" ]    
+  elif [ "$slave" == "daint" ]
     module load daint-gpu
     module load libxml2/.2.9.4-CrayGNU-2016.11-Python-2.7.12 # Hidden module for workaround
   fi
-
   FC=ftn cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
 fi
 
