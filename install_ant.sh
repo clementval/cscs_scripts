@@ -62,7 +62,7 @@ rm ${ANT_TAR}
 echo ""
 echo "INTSALLATION PROCEDURE:"
 echo "Define ANT_HOME in your .bashrc file as follows:"
-echo "ANT_HOME=${ANT_INSTALL_PATH}"
+echo "ANT_HOME=\"${ANT_INSTALL_PATH}\""
 echo "Add ${ANT_HOME}/bin to your PATH variable"
 echo ""
 
