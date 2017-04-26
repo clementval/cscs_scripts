@@ -9,7 +9,7 @@ then
 elif [ "$slave" == "daint" ]
 then
   # For Daint
-  export ANT_HOME="/users/clementv/install/daint/ant/apache-ant-1.10.1"
+  export ANT_HOME="/project/c01/install/daint/ant/apache-ant-1.10.1/"
   export PATH=$PATH:$ANT_HOME/bin
   module load CMake
   module load java
