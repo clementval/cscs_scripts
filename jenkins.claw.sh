@@ -9,7 +9,7 @@ then
 elif [ "$slave" == "daint" ]
 then
   # For Daint
-  export ANT_HOME="/scratch/snx3000/clementv/apache-ant-1.10.1"
+  export ANT_HOME="/users/clementv/install/daint/ant/apache-ant-1.10.1"
   export PATH=$PATH:$ANT_HOME/bin
   module load CMake
   module load java
@@ -57,6 +57,7 @@ then
   then
     module load GCC
   elif [ "$slave" == "daint" ]
+  then
     module load daint-gpu
     module load libxml2/.2.9.4-CrayGNU-2016.11-Python-2.7.12 # Hidden module for workaround
   fi
