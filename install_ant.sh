@@ -55,14 +55,14 @@ mkdir -p ${ANT_INSTALL_PATH}
 tar -xf ${ANT_TAR} --directory ${ANT_INSTALL_PATH}
 ANT_INSTALL_PATH=${ANT_INSTALL_PATH}/${ANT_EXTRACTED_DIR}
 
+${ANT_INSTALL_PATH}/bin/ant -f ${ANT_INSTALL_PATH}/fetch.xml -Ddest=system
+
+rm ${ANT_TAR}
+
 echo ""
 echo "INTSALLATION PROCEDURE:"
 echo "Define ANT_HOME in your .bashrc file as follows:"
 echo "ANT_HOME=${ANT_INSTALL_PATH}"
 echo "Add ${ANT_HOME}/bin to your PATH variable"
 echo ""
-
-${ANT_INSTALL_PATH}/bin/ant -f ${ANT_INSTALL_PATH}/fetch.xml -Ddest=system
-
-rm ${ANT_TAR}
 
