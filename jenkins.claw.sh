@@ -22,6 +22,8 @@ git submodule update --remote
 # Install path by computer and compiler
 CLAW_INSTALL_PATH=/project/c01/install/$slave/claw/$compiler
 
+DAINT_LIBXML2="--with-libxml2-lib=/usr/lib64/ --with-libxml2-include=/usr/include/"
+
 
 if [ "$compiler" == "gnu" ]
 then
@@ -33,7 +35,7 @@ then
   then
     module load cudatoolkit
     # On Daint the cray wrapper must be used regardless the compiling env.
-    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH -DOMNI_CONF_OPTION=${DAINT_LIBXML2} -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
   fi
 elif [ "$compiler" == "pgi" ]
 then
@@ -46,7 +48,7 @@ then
   then
     module load cudatoolkit
     # On Daint the cray wrapper must be used regardless the compiling env.
-    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH -DOMNI_CONF_OPTION=${DAINT_LIBXML2} -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
   fi
 elif [ "$compiler" == "cray" ]
 then
