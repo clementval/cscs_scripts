@@ -1,8 +1,8 @@
-#!/bin/bash 
+#!/bin/bash
 
 
 #
-# This scripts helps to test the compilation and tests execution of the 
+# This scripts helps to test the compilation and tests execution of the
 # CLAW compiler on Piz Kesch and Piz Daint at CSCS.
 #
 
@@ -32,13 +32,13 @@ while getopts "hfb:c:i:" opt; do
     show_help
     exit 0
     ;;
-  f)  
+  f)
     CLAW_REPO=$CLAW_FORK_REPO
     ;;
-  b)  
+  b)
     CLAW_BRANCH=$OPTARG
     ;;
-  c)  
+  c)
     CLAW_BASE_COMPILER=$OPTARG
     ;;
   i)
@@ -70,7 +70,7 @@ case  "$CLAW_BASE_COMPILER" in
     module rm PrgEnv-pgi && module rm PrgEnv-cray
     module load PrgEnv-gnu
     if [[ $COMPUTER == "kesch" ]]
-    then 
+    then
       CLAW_FC=gfortran
       CLAW_CC=gcc
       CLAW_CXX=g++
@@ -79,7 +79,7 @@ case  "$CLAW_BASE_COMPILER" in
       CLAW_FC=ftn
       CLAW_CC=cc
       CLAW_CXX=CC
-      OMNI_MPI_CC="MPI_CC=cc" 
+      OMNI_MPI_CC="MPI_CC=cc"
       OMNI_MPI_FC="MPI_FC=ftn"
       ADDITONAL_OPTIONS="-DOMNI_MPI_CC=$OMNI_MPI_CC -DOMNI_MPI_FC=$OMNI_MPI_FC"
     fi
@@ -88,7 +88,7 @@ case  "$CLAW_BASE_COMPILER" in
     module rm PrgEnv-gnu && module rm PrgEnv-cray
     module load PrgEnv-pgi
     if [[ $COMPUTER == "kesch" ]]
-    then 
+    then
       CLAW_FC=mpif90
       CLAW_CC=mpicc
       CLAW_CXX=pgc++
@@ -98,7 +98,7 @@ case  "$CLAW_BASE_COMPILER" in
       CLAW_FC=ftn
       CLAW_CC=cc
       CLAW_CXX=CC
-      OMNI_MPI_CC="MPI_CC=cc" 
+      OMNI_MPI_CC="MPI_CC=cc"
       OMNI_MPI_FC="MPI_FC=ftn"
       ADDITONAL_OPTIONS="-DOMNI_MPI_CC=$OMNI_MPI_CC -DOMNI_MPI_FC=$OMNI_MPI_FC"
     fi
@@ -128,7 +128,7 @@ echo "  - CC : $CLAW_CC"
 echo "  - CXX: $CLAW_CXX"
 echo "- OMNI MPI CC: $OMNI_MPI_CC"
 echo "- OMNI MPI FC: $OMNI_MPI_FC"
-echo "- Dest dir: $CLAW_TEST_DIR" 
+echo "- Dest dir: $CLAW_TEST_DIR"
 echo "================================"
 echo ""
 
@@ -139,7 +139,7 @@ rm -rf $CLAW_TEST_DIR
 mkdir $CLAW_TEST_DIR
 cd $CLAW_TEST_DIR
 
-# Retrive repository and branch
+# Retrieve repository and branch
 git clone -b $CLAW_BRANCH $CLAW_REPO
 cd claw-compiler
 git submodule init
