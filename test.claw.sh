@@ -8,13 +8,14 @@
 
 
 function show_help(){
-  echo "$0 [-b <branch-name>] [-f] [-c gnu|pgi|cray] [-i <install-path>]"
+  echo "$0 [-b <branch-name>] [-f] [-c gnu|pgi|cray] [-i <install-path>] [-o <offline-tar-file>]"
   echo ""
   echo "Options:"
-  echo " -b <branch-name>  Specifiy the branch to be tested"
-  echo " -f                Use the forked repository for test"
-  echo " -c <compiler-id>  Define the base compiler to use"
-  echo " -i <install-path> Set an install path"
+  echo " -b <branch-name>      Specifiy the branch to be tested"
+  echo " -f                    Use the forked repository for test"
+  echo " -c <compiler-id>      Define the base compiler to use"
+  echo " -i <install-path>     Set an install path"
+  echo " -o <offline-tar-file> Use offline archive"
 }
 
 # Define local variable
@@ -25,8 +26,9 @@ CLAW_REPO=$CLAW_MAIN_REPO
 CLAW_TEST_DIR=buildtemp-claw
 CLAW_INSTALL_DIR=$PWD/$CLAW_TEST_DIR/install
 CLAW_BASE_COMPILER="gnu"
+CLAW_OFFLINE=false
 
-while getopts "hfb:c:i:" opt; do
+while getopts "hfb:c:i:o:" opt; do
   case "$opt" in
   h)
     show_help
@@ -44,25 +46,49 @@ while getopts "hfb:c:i:" opt; do
   i)
     CLAW_INSTALL_DIR=$OPTARG
     ;;
+  i)
+    CLAW_OFFLINE=true
+    CLAW_OFFLINE_TAR=$OPTARG
+    ;;
   esac
 done
 
 COMPUTER=$(hostname)
 
-if [[ $COMPUTER == *"daint"* ]]
+if [[ $COMPUTER == *"daint"* ]]   # CSCS supercomputer
 then
   COMPUTER="daint"
-  CMAKE_MOD="CMake"
-elif [[ $COMPUTER == *"kesch"* ]]
+  module load CMake
+elif [[ $COMPUTER == *"kesch"* ]] # MeteoSwiss machine
 then
   COMPUTER="kesch"
-  CMAKE_MOD="cmake"
+  module load cmake
+elif [[ $COMPUTER == *"lxg"* ]]   # ECMWF GPU Cluster
+then
+  COMPUTER="lxg"
+  module switch gnu gnu/4.9.1
+  module load java openmpi cuda cmake
+  export JAVA_HOME=/usr/local/apps/java/1.8.0_102
 fi
 
-
-
-# Load recent version of cmake
-module load $CMAKE_MOD
+if [[ ${CLAW_OFFLINE} ]]
+then
+  echo ""
+  echo "=================================="
+  echo "CLAW FORTRAN Compiler offline test"
+  echo "=================================="
+  echo "- Computer: $COMPUTER"
+  echo "- Install path: $CLAW_INSTALL_DIR"
+  echo "=================================="
+  echo ""
+  tar xvf $CLAW_OFFLINE_TAR
+  cd claw-compiler
+  cmake -DOFFLINE=ON -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_DIR .
+  make
+  make install
+  make transformation test
+  exit 0
+fi
 
 # Load correct PrgEnv
 case  "$CLAW_BASE_COMPILER" in
@@ -116,6 +142,7 @@ case  "$CLAW_BASE_COMPILER" in
 esac
 
 echo ""
+echo "================================"
 echo "CLAW FORTRAN Compiler full tests"
 echo "================================"
 echo "- Computer: $COMPUTER"
@@ -131,8 +158,6 @@ echo "- OMNI MPI FC: $OMNI_MPI_FC"
 echo "- Dest dir: $CLAW_TEST_DIR"
 echo "================================"
 echo ""
-
-
 
 # Prepare directory
 rm -rf $CLAW_TEST_DIR
