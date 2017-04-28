@@ -22,7 +22,7 @@ fi
 
 # Get OMNI Compiler as submodule
 git submodule init
-git submodule update --remote
+git submodule update
 
 # Install path by computer and compiler
 CLAW_INSTALL_PATH=/project/c01/install/$slave/claw/$compiler
