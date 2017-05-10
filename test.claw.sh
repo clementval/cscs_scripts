@@ -46,7 +46,7 @@ while getopts "hfb:c:i:o:" opt; do
   i)
     CLAW_INSTALL_DIR=$OPTARG
     ;;
-  i)
+  o)
     CLAW_OFFLINE=true
     CLAW_OFFLINE_TAR=$OPTARG
     ;;
@@ -71,7 +71,7 @@ then
   export JAVA_HOME=/usr/local/apps/java/1.8.0_102
 fi
 
-if [[ ${CLAW_OFFLINE} ]]
+if [[ $CLAW_OFFLINE == true ]]
 then
   echo ""
   echo "=================================="
