@@ -33,7 +33,7 @@ then
   module load PrgEnv-gnu
   if [ "$slave" == "kesch" ]
   then
-    FC=gfortran cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
+    FC=gfortran CC=gcc CXX=g++ cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
   elif [ "$slave" == "daint" ]
   then
     module load cudatoolkit
@@ -60,7 +60,7 @@ then
   then
     module load PrgEnv-cray
     module load GCC
-    FC=ftn cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
   elif [ "$slave" == "daint" ]
   then
     export CRAYPE_LINK_TYPE=dynamic
