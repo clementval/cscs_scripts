@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 
 #
@@ -14,10 +14,10 @@ function show_help(){
 }
 
 # Define local variable
-ANT_TAR="apache-ant-1.10.1-bin.tar.gz"
-ANT_BINARY="http://www.pirbot.com/mirrors/apache/ant/binaries/${ANT_TAR}"
+ANT_TAR="apache-ant-1.9.9-bin.tar.gz"
+ANT_BINARY="http://mirror.switch.ch/mirror/apache/dist/ant/binaries/${ANT_TAR}"
 ANT_INSTALL_PATH=""
-ANT_EXTRACTED_DIR="apache-ant-1.10.1"
+ANT_EXTRACTED_DIR="apache-ant-1.9.9"
 
 while getopts "hi:" opt; do
   case "$opt" in
@@ -40,11 +40,11 @@ then
 fi
 
 echo ""
+echo "======================="
 echo "ANT install information"
-echo "================================"
+echo "======================="
 echo "- ANT binary path: $ANT_BINARY"
 echo "- Install path: $ANT_INSTALL_PATH"
-echo "================================"
 echo ""
 
 # Download the binary
@@ -63,6 +63,5 @@ echo ""
 echo "INTSALLATION PROCEDURE:"
 echo "Define ANT_HOME in your .bashrc file as follows:"
 echo "ANT_HOME=\"${ANT_INSTALL_PATH}\""
-echo "Add ${ANT_HOME}/bin to your PATH variable"
+echo "Add \${ANT_HOME}/bin to your PATH variable"
 echo ""
-

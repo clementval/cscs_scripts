@@ -1,5 +1,10 @@
 #!/bin/bash -e
 
+# Filter:
+# (slave=="kesch" && compiler=="gnu") || (slave=="kesch" && compiler=="pgi") ||
+# (slave=="daint" && compiler=="cray") || (slave=="daint" && compiler=="pgi") ||
+# (slave=="daint" && compiler=="gnu")
+
 module load git
 
 if [ "$slave" == "kesch" ]
@@ -9,7 +14,7 @@ then
 elif [ "$slave" == "daint" ]
 then
   # For Daint
-  export ANT_HOME="/users/clementv/install/daint/ant/apache-ant-1.10.1"
+  export ANT_HOME="/project/c01/install/daint/ant/apache-ant-1.10.1/"
   export PATH=$PATH:$ANT_HOME/bin
   module load CMake
   module load java
@@ -17,7 +22,7 @@ fi
 
 # Get OMNI Compiler as submodule
 git submodule init
-git submodule update --remote
+git submodule update
 
 # Install path by computer and compiler
 CLAW_INSTALL_PATH=/project/c01/install/$slave/claw/$compiler
@@ -51,17 +56,18 @@ then
   fi
 elif [ "$compiler" == "cray" ]
 then
-  module rm PrgEnv-pgi && module rm PrgEnv-gnu
-  module load PrgEnv-cray
   if [ "$slave" == "kesch" ]
   then
+    module load PrgEnv-cray
     module load GCC
+    FC=ftn cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
   elif [ "$slave" == "daint" ]
   then
+    export CRAYPE_LINK_TYPE=dynamic
     module load daint-gpu
-    module load libxml2/.2.9.4-CrayGNU-2016.11-Python-2.7.12 # Hidden module for workaround
+    module load PrgEnv-cray
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
   fi
-  FC=ftn cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
 fi
 
 # Compile and run unit tests
