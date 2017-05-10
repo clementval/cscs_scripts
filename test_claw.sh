@@ -107,8 +107,16 @@ case  "$CLAW_BASE_COMPILER" in
     module rm PrgEnv-pgi && module rm PrgEnv-gnu
     module load PrgEnv-cray
     CLAW_FC=ftn
-    CLAW_CC=cc
-    CLAW_CXX=CC
+    if [[ $COMPUTER == "kesch" ]]
+    then 
+      module load GCC
+      CLAW_CC=gcc
+      CLAW_CXX=g++
+    elif [[ $COMPUTER == "daint" ]]
+    then
+      CLAW_CC=cc
+      CLAW_CXX=CC
+    fi
   ;;
   *)
     echo "Error: Unknown compiler ..."
