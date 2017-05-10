@@ -104,8 +104,10 @@ case  "$CLAW_BASE_COMPILER" in
     fi
   ;;
   "cray")
+    export CRAYPE_LINK_TYPE=dynamic
     module rm PrgEnv-pgi && module rm PrgEnv-gnu
     module load PrgEnv-cray
+    module load java
     CLAW_FC=ftn
     CLAW_CC=cc
     CLAW_CXX=CC
