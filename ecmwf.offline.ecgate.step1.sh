@@ -11,9 +11,9 @@ COMPUTER=$(hostname)
 module load git
 
 echo ""
-echo "================================"
-echo "CLAW FORTRAN Compiler offline   "
-echo "================================"
+echo "========================================="
+echo "CLAW FORTRAN Compiler offline ECGATE step"
+echo "========================================="
 echo "- Computer: $COMPUTER"
 echo "- Repo: $CLAW_REPO"
 echo "- Branch: $CLAW_BRANCH"
