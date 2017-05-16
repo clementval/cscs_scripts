@@ -20,6 +20,7 @@ echo "- Computer: $COMPUTER"
 echo "- Archive: $archive"
 echo ""
 
+rm -f claw-compiler
 module switch gnu gnu/4.9.1
 module load java openmpi cuda cmake
 tar xvf ${archive}

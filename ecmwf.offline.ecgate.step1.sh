@@ -31,9 +31,11 @@ export https_proxy=http://proxy.ecmwf.int:3333
 export http_proxy=http://proxy.ecmwf.int:3333
 export ANT_OPTS="-Dhttp.proxyHost=proxy.ecmwf.int -Dhttp.proxyPort=3333 -Dhttps.proxyHost=proxy.ecmwf.int -Dhttps.proxyPort=3333"
 
+rm -rf claw-compiler
 git clone -b $CLAW_BRANCH $CLAW_REPO
 cd claw-compiler
 ./scripts/offline.sh
 cd -
 tar cvf claw-compiler.tar claw-compiler/*
 gzip claw-compiler.tar
+rm -rf claw-compiler
