@@ -19,6 +19,9 @@ echo "- Repo: $CLAW_REPO"
 echo "- Branch: $CLAW_BRANCH"
 echo ""
 
+CLAW_BRANCH="master"
+CLAW_REPO="https://github.com/C2SM-RCM/claw-compiler.git"
+
 # Set up ANT variables
 export ANT_HOME="/home/ms/ec_ext/extvc/install/ant/apache-ant-1.9.9"
 export PATH=$PATH:${ANT_HOME}/bin
