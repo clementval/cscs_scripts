@@ -1,0 +1,42 @@
+#!/bin/bash -e
+
+git submodule init
+git submodule update --remote
+# shellcheck disable=SC2154
+export PATH=/project/c01/install/"$slave"/claw/gnu/bin:$PATH
+
+/project/c01/install/"$slave"/claw/gnu/bin/clawfc --version
+/project/c01/install/"$slave"/claw/gnu/bin/clawfc --show-env
+# shellcheck disable=SC2154
+cd radiation/"$version" || exit 1
+
+# shellcheck disable=SC2154
+if [ "$precision" == "single" ]
+then
+  ./build.sh -t "$target" -c pgi -4
+else
+  ./build.sh -t "$target" -c cray
+fi
+
+cd run || exit 1
+
+if [ "$precision" == "single" ]
+then
+  ./get_data.sh -4
+else
+  ./get_data.sh
+fi
+
+# shellcheck disable=SC1091
+source ../modules_fortran.env
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/cray/cce/8.4.0/craylibs/x86-64/
+
+if [ "$target" == "gpu" ]
+then
+  export G2G=1
+  salloc --time=00:05:00 --partition=debug --ntasks=1 --gres=gpu:1 srun -n 1 ./standalone
+else
+  salloc --time=00:05:00 --partition=debug --ntasks=1 srun -n 1 ./standalone
+fi
+
+/project/c01/install/"$slave"/serialbox/gnu/bin/compare Field_rank0.json radiation-standalone_rank0.json
