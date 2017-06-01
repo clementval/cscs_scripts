@@ -9,7 +9,7 @@ export PATH=/project/c01/install/"$slave"/claw/pgi/bin:$PATH
 compiler="pgi"
 
 /project/c01/install/"$slave"/claw/"$compiler"/bin/clawfc --version
-/project/c01/install/"$slave"/claw/$compiler/bin/clawfc --show-env
+/project/c01/install/"$slave"/claw/"$compiler"/bin/clawfc --show-env
 # shellcheck disable=SC2154
 cd radiation/"$version" || exit 1
 
