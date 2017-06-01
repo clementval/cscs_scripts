@@ -3,19 +3,22 @@
 git submodule init
 git submodule update --remote
 # shellcheck disable=SC2154
-export PATH=/project/c01/install/"$slave"/claw/gnu/bin:$PATH
+export PATH=/project/c01/install/"$slave"/claw/pgi/bin:$PATH
 
-/project/c01/install/"$slave"/claw/gnu/bin/clawfc --version
-/project/c01/install/"$slave"/claw/gnu/bin/clawfc --show-env
+# compiler can be cray or pgi
+compiler="pgi"
+
+/project/c01/install/"$slave"/claw/"$compiler"/bin/clawfc --version
+/project/c01/install/"$slave"/claw/$compiler/bin/clawfc --show-env
 # shellcheck disable=SC2154
 cd radiation/"$version" || exit 1
 
 # shellcheck disable=SC2154
 if [ "$precision" == "single" ]
 then
-  ./build.sh -t "$target" -c pgi -4
+  ./build.sh -t "$target" -c $compiler -4
 else
-  ./build.sh -t "$target" -c cray
+  ./build.sh -t "$target" -c $compiler
 fi
 
 cd run || exit 1
