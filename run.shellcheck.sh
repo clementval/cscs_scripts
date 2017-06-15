@@ -1,9 +1,9 @@
 #!/bin/bash
 
-shellcheck ecmwf.offline.ecgate.step1.sh 
-shellcheck ecmwf.offline.lxg.step2.sh
-shellcheck install.ant.sh
-shellcheck jenkins.claw.sh
-shellcheck jenkins.omni-parse.sh
-shellcheck jenkins.omni.sh
-shellcheck test.claw.sh
+shellcheck ecmwf/offline.claw_install.step1_ecgate.sh
+shellcheck ecmwf/offline.claw_install.step2_lxg.sh
+shellcheck cscs/jenkins.install_ant.sh
+shellcheck cscs/jenkins.claw.sh
+shellcheck cscs/jenkins.omni-parse.sh
+shellcheck cscs/jenkins.omni.sh
+shellcheck cscs/test.claw.sh
