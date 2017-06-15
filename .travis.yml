@@ -1,0 +1,31 @@
+language: bash
+
+addons:
+  apt:
+    sources:
+    - debian-sid    # Grab ShellCheck from the Debian repo
+    packages:
+    - shellcheck
+
+# Disable the default submodule logic
+git:
+  submodules: false
+
+# Check scrips for warnings/errors
+script:
+  - shellcheck ecmwf.offline.ecgate.step1.sh
+  - shellcheck ecmwf.offline.lxg.step2.sh
+  - shellcheck install.ant.sh
+  - shellcheck jenkins.claw.sh
+  - shellcheck jenkins.omni-parse.sh
+  - shellcheck jenkins.omni.sh
+  - shellcheck test.claw.sh
+
+
+
+# Notification settings
+notifications:
+  slack: meteoswiss-apn:FFUYLitE3BsncqECl4RqlfHP
+  email:
+    on_success: never
+    on_failure: always
