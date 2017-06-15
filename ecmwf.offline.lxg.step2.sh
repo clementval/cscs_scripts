@@ -24,7 +24,7 @@ rm -f claw-compiler
 module switch gnu gnu/4.9.1
 module load java openmpi cuda cmake
 tar xvf ${archive}
-cd claw-compiler
+cd claw-compiler || exit 1
 export JAVA_HOME=/usr/local/apps/java/1.8.0_102
 cmake -DOFFLINE=ON -DCMAKE_INSTALL_PREFIX=/home/ms/ec_ext/extvc/install/claw .
 make
