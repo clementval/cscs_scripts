@@ -11,6 +11,7 @@
 
 module load git
 
+# shellcheck disable=SC2154
 if [ "$slave" == "kesch" ]
 then
   module load cmake
@@ -29,6 +30,7 @@ git submodule init
 git submodule update
 
 # Install path by computer and compiler
+# shellcheck disable=SC2154
 CLAW_INSTALL_PATH=/project/c01/install/$slave/claw/$compiler
 
 if [ "$compiler" == "gnu" ]
@@ -37,12 +39,12 @@ then
   module load PrgEnv-gnu
   if [ "$slave" == "kesch" ]
   then
-    FC=gfortran CC=gcc CXX=g++ cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
+    FC=gfortran CC=gcc CXX=g++ cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" .
   elif [ "$slave" == "daint" ]
   then
     module load cudatoolkit
     # On Daint the cray wrapper must be used regardless the compiling env.
-    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
   fi
 elif [ "$compiler" == "pgi" ]
 then
@@ -51,12 +53,12 @@ then
   if [ "$slave" == "kesch" ]
   then
     module load GCC
-    cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
+    cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" .
   elif [ "$slave" == "daint" ]
   then
     module load cudatoolkit
     # On Daint the cray wrapper must be used regardless the compiling env.
-    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
   fi
 elif [ "$compiler" == "cray" ]
 then
@@ -64,13 +66,13 @@ then
   then
     module load PrgEnv-cray
     module load GCC
-    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH .
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" .
   elif [ "$slave" == "daint" ]
   then
     export CRAYPE_LINK_TYPE=dynamic
     module load daint-gpu
     module load PrgEnv-cray
-    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_PATH -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
   fi
 fi
 
