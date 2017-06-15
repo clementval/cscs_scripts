@@ -1,5 +1,9 @@
 #!/bin/bash -e
 
+#
+# Jenkins script for the OMNI Compiler build test
+#
+
 # Filter:
 # (slave=="kesch" && compiler=="gnu") || (slave=="kesch" && compiler=="pgi") ||
 # (slave=="daint" && compiler=="cray") || (slave=="daint" && compiler=="pgi") ||

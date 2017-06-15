@@ -1,5 +1,9 @@
 #!/bin/bash -e
 
+#
+# Jenkins script for the standalone radiation build and tests.
+#
+
 git submodule init
 git submodule update --remote
 # shellcheck disable=SC2154

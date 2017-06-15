@@ -1,10 +1,8 @@
 #!/bin/bash
 
-
 #
 # This scripts helps to test install ANT on CSCS system
 #
-
 
 function show_help(){
   echo "$0 -i <install-path>"

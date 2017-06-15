@@ -1,5 +1,9 @@
 #!/bin/bash -e
 
+#
+# Jenkins script for the OMNI Compiler parsing test
+#
+
 module load git
 
 # shellcheck disable=SC2154
