@@ -49,11 +49,11 @@ echo ""
 wget ${ANT_BINARY}
 
 # Perform install task
-mkdir -p ${ANT_INSTALL_PATH}
-tar -xf ${ANT_TAR} --directory ${ANT_INSTALL_PATH}
+mkdir -p "${ANT_INSTALL_PATH}"
+tar -xf ${ANT_TAR} --directory "${ANT_INSTALL_PATH}"
 ANT_INSTALL_PATH=${ANT_INSTALL_PATH}/${ANT_EXTRACTED_DIR}
 
-${ANT_INSTALL_PATH}/bin/ant -f ${ANT_INSTALL_PATH}/fetch.xml -Ddest=system
+"${ANT_INSTALL_PATH}"/bin/ant -f "${ANT_INSTALL_PATH}"/fetch.xml -Ddest=system
 
 rm ${ANT_TAR}
 
