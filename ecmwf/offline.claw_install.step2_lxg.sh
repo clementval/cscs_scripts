@@ -2,7 +2,7 @@
 
 #
 # This scripts helps to pack an offline version of the claw-compiler repository
-# to be build on LXG cluster
+# to be build on LXG cluster. This script needs to be executed on the LXG.
 #
 
 COMPUTER=$(hostname)
