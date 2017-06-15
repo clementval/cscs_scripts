@@ -1,2 +1,2 @@
-# cscs_scripts
-My personal scripts on CSCS machines to test various things
+# HPC scripts
+Various scripts used on some HPC machines at CSCS or ECMWF.
