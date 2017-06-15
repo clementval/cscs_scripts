@@ -81,9 +81,9 @@ then
   echo "- Install path: $CLAW_INSTALL_DIR"
   echo "=================================="
   echo ""
-  tar xvf $CLAW_OFFLINE_TAR
-  cd claw-compiler
-  cmake -DOFFLINE=ON -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_DIR .
+  tar xvf "$CLAW_OFFLINE_TAR"
+  cd claw-compiler || exit 1
+  cmake -DOFFLINE=ON -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_DIR" .
   make
   make install
   make transformation test
@@ -136,7 +136,7 @@ case  "$CLAW_BASE_COMPILER" in
     module load java
     CLAW_FC=ftn
     if [[ $COMPUTER == "kesch" ]]
-    then 
+    then
       module load GCC
       CLAW_CC=gcc
       CLAW_CXX=g++
@@ -172,16 +172,17 @@ echo ""
 # Prepare directory
 rm -rf $CLAW_TEST_DIR
 mkdir $CLAW_TEST_DIR
-cd $CLAW_TEST_DIR
+cd $CLAW_TEST_DIR || exit 1
 
 # Retrieve repository and branch
-git clone -b $CLAW_BRANCH $CLAW_REPO
-cd claw-compiler
+git clone -b "$CLAW_BRANCH" $CLAW_REPO
+cd claw-compiler || exit 1
 git submodule init
 git submodule update --remote
 
 # Configure using cmake
-FC=$CLAW_FC CC=$CLAW_CC CXX=$CLAW_CXX cmake -DCMAKE_INSTALL_PREFIX=$CLAW_INSTALL_DIR $ADDITONAL_OPTIONS .
+# shellcheck disable=SC2086
+FC=$CLAW_FC CC=$CLAW_CC CXX=$CLAW_CXX cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_DIR" $ADDITONAL_OPTIONS .
 
 # Compile and test
 make all transformation test
