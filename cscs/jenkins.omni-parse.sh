@@ -24,7 +24,11 @@ then
 fi
 
 # First parse test fetch, compile and install CLAW FORTRAN Compiler
-./cosmo/parse.cosmo.sh
+if ! ./cosmo/parse.cosmo.sh; then
+  exit 1
+fi
 
 # Second parse test reiles on the first installation
-#./icon/parse.icon.sh -s
+#if ! ./icon/parse.icon.sh -s; then
+#  exit 1
+#fi
