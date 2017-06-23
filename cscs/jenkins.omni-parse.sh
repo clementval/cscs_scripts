@@ -5,6 +5,8 @@
 #
 
 module load git
+module rm PrgEnv-pgi && module rm PrgEnv-cray
+module load PrgEnv-gnu
 
 # shellcheck disable=SC2154
 if [ "$slave" == "kesch" ]
@@ -18,16 +20,11 @@ then
   export PATH=$PATH:$ANT_HOME/bin
   module load CMake
   module load java
-fi
-
-
-module rm PrgEnv-pgi && module rm PrgEnv-cray
-module load PrgEnv-gnu
-if [ "$slave" == "daint" ]
-then
   module load cudatoolkit
 fi
 
+# First parse test fetch, compile and install CLAW FORTRAN Compiler
 ./cosmo/parse.cosmo.sh
 
-./icon/parse.icon.sh
+# Second parse test reiles on the first installation
+#./icon/parse.icon.sh -s
