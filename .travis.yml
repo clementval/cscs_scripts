@@ -9,14 +9,7 @@ addons:
 
 # Check scrips for warnings/errors
 script:
-  - shellcheck ecmwf/offline.claw_install.step1_ecgate
-  - shellcheck ecmwf/offline.claw_install.step2_lxg
-  - shellcheck cscs/install.ant
-  - shellcheck cscs/jenkins.ant
-  - shellcheck cscs/jenkins.claw
-  - shellcheck cscs/jenkins.omni-parse
-  - shellcheck cscs/jenkins.omni
-  - shellcheck cscs/test.claw
+  - ./run.shellcheck
 
 # Notification settings
 notifications:
