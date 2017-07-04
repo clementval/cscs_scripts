@@ -1,3 +1,6 @@
 #!/bin/bash -e
+#
+# Copy of the jenkins plan to install ant
+#
 
 ./install.ant.sh -i /project/c01/install/daint/ant/

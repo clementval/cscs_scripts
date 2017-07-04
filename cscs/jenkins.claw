@@ -1,7 +1,6 @@
 #!/bin/bash -e
-
 #
-# Jenkins script for the CLAW Compiler build and tests
+# Copy of the jenkins plan script for the CLAW Compiler build and tests
 #
 
 # Filter:

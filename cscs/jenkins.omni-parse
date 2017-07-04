@@ -1,7 +1,6 @@
 #!/bin/bash -e
-
 #
-# Jenkins script for the OMNI Compiler parsing test
+# Copy of the jenkins plan script for the OMNI Compiler parsing test
 #
 
 module load git

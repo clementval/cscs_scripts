@@ -1,7 +1,6 @@
 #!/bin/bash -e
-
 #
-# Jenkins script for the OMNI Compiler build test
+# Copy of the jenkins plan script for the OMNI Compiler build test
 #
 
 # Filter:

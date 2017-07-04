@@ -1,7 +1,6 @@
 #!/bin/bash
-
 #
-# This scripts helps to test install ANT on CSCS system
+# This scripts helps to test install ANT on CSCS system through Jenkins
 #
 
 function show_help()
