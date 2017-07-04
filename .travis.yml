@@ -7,10 +7,6 @@ addons:
     packages:
     - shellcheck
 
-# Disable the default submodule logic
-git:
-  submodules: false
-
 # Check scrips for warnings/errors
 script:
   - shellcheck ecmwf/offline.claw_install.step1_ecgate.sh
