@@ -55,24 +55,20 @@ done
 
 COMPUTER=$(hostname)
 
-if [[ $COMPUTER == *"daint"* ]]   # CSCS supercomputer
-then
+if [[ $COMPUTER == *"daint"* ]]; then   # CSCS supercomputer
   COMPUTER="daint"
   module load CMake
-elif [[ $COMPUTER == *"kesch"* ]] # MeteoSwiss machine
-then
+elif [[ $COMPUTER == *"kesch"* ]]; then # MeteoSwiss machine
   COMPUTER="kesch"
   module load cmake
-elif [[ $COMPUTER == *"lxg"* ]]   # ECMWF GPU Cluster
-then
+elif [[ $COMPUTER == *"lxg"* ]]; then   # ECMWF GPU Cluster
   COMPUTER="lxg"
   module switch gnu gnu/4.9.1
   module load java openmpi cuda cmake
   export JAVA_HOME=/usr/local/apps/java/1.8.0_102
 fi
 
-if [[ $CLAW_OFFLINE == true ]]
-then
+if [[ $CLAW_OFFLINE == true ]]; then
   echo ""
   echo "=================================="
   echo "CLAW FORTRAN Compiler offline test"
@@ -95,13 +91,11 @@ case  "$CLAW_BASE_COMPILER" in
   "gnu")
     module rm PrgEnv-pgi && module rm PrgEnv-cray
     module load PrgEnv-gnu
-    if [[ $COMPUTER == "kesch" ]]
-    then
+    if [[ $COMPUTER == "kesch" ]]; then
       CLAW_FC=gfortran
       CLAW_CC=gcc
       CLAW_CXX=g++
-    elif [[ $COMPUTER == "daint" ]]
-    then
+    elif [[ $COMPUTER == "daint" ]]; then
       CLAW_FC=ftn
       CLAW_CC=cc
       CLAW_CXX=CC
@@ -113,13 +107,11 @@ case  "$CLAW_BASE_COMPILER" in
   "pgi")
     module rm PrgEnv-gnu && module rm PrgEnv-cray
     module load PrgEnv-pgi
-    if [[ $COMPUTER == "kesch" ]]
-    then
+    if [[ $COMPUTER == "kesch" ]]; then
       CLAW_FC=mpif90
       CLAW_CC=mpicc
       CLAW_CXX=pgc++
-    elif [[ $COMPUTER == "daint" ]]
-    then
+    elif [[ $COMPUTER == "daint" ]]; then
       module load gcc
       CLAW_FC=ftn
       CLAW_CC=cc
@@ -135,13 +127,11 @@ case  "$CLAW_BASE_COMPILER" in
     module load PrgEnv-cray
     module load java
     CLAW_FC=ftn
-    if [[ $COMPUTER == "kesch" ]]
-    then
+    if [[ $COMPUTER == "kesch" ]]; then
       module load GCC
       CLAW_CC=gcc
       CLAW_CXX=g++
-    elif [[ $COMPUTER == "daint" ]]
-    then
+    elif [[ $COMPUTER == "daint" ]]; then
       CLAW_CC=cc
       CLAW_CXX=CC
     fi

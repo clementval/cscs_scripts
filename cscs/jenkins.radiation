@@ -18,8 +18,7 @@ compiler="pgi"
 cd radiation/"$version" || exit 1
 
 # shellcheck disable=SC2154
-if [ "$precision" == "single" ]
-then
+if [ "$precision" == "single" ]; then
   ./build.sh -t "$target" -c $compiler -4
 else
   ./build.sh -t "$target" -c $compiler
@@ -27,8 +26,7 @@ fi
 
 cd run || exit 1
 
-if [ "$precision" == "single" ]
-then
+if [ "$precision" == "single" ]; then
   ./get_data.sh -4
 else
   ./get_data.sh
@@ -38,8 +36,7 @@ fi
 source ../modules_fortran.env
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/cray/cce/8.4.0/craylibs/x86-64/
 
-if [ "$target" == "gpu" ]
-then
+if [ "$target" == "gpu" ]; then
   export G2G=1
   salloc --time=00:05:00 --partition=debug --ntasks=1 --gres=gpu:1 srun -n 1 ./standalone
 else

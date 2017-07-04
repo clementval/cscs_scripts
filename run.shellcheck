@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# ECMWFC scripts
+shellcheck ecmwf/offline.claw_install.step1_ecgate
+shellcheck ecmwf/offline.claw_install.step2_lxg
+
+# CSCS scripts
+shellcheck cscs/install.ant
+shellcheck cscs/jenkins.ant
+shellcheck cscs/jenkins.claw
+shellcheck cscs/jenkins.omni-parse
+shellcheck cscs/jenkins.omni
+shellcheck cscs/test.claw

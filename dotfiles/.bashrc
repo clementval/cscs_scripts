@@ -4,11 +4,9 @@
 test -s ~/.alias && . ~/.alias || true
 
 # Define host
-if [[ $(hostname -s) = kesch* ]]
-then
+if [[ $(hostname -s) = kesch* ]]; then
   HOST="kesch"
-elif [[ $(hostname -s) = daint* ]]
-then
+elif [[ $(hostname -s) = daint* ]]; then
   HOST="daint"
 else
   HOST=""
@@ -16,14 +14,11 @@ fi
 
 # Load modules and export variables corresponding to the host
 # Do not load any module when connected on ela
-if [[ "$HOST" != "" ]]
-then
-  if [[ "$HOST" = "kesch" ]]
-  then
+if [[ "$HOST" != "" ]]; then
+  if [[ "$HOST" = "kesch" ]]; then
     source /etc/bashrc
     module load cmake
-  elif [[ "$HOST" = "daint" ]]
-  then
+  elif [[ "$HOST" = "daint" ]]; then
 #    module load daint-gpu
 #    module load CMake
 #    module load java
