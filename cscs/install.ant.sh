@@ -4,7 +4,8 @@
 # This scripts helps to test install ANT on CSCS system
 #
 
-function show_help(){
+function show_help()
+{
   echo "$0 -i <install-path>"
   echo ""
   echo "Options:"
@@ -23,14 +24,11 @@ while getopts "hi:" opt; do
     show_help
     exit 0
     ;;
-  i)
-    ANT_INSTALL_PATH=$OPTARG
-    ;;
+  i) ANT_INSTALL_PATH=$OPTARG ;;
   esac
 done
 
-if [ "${ANT_INSTALL_PATH}" == "" ]
-then
+if [ "${ANT_INSTALL_PATH}" == "" ]; then
   echo "Install path must be specified"
   echo ""
   show_help
