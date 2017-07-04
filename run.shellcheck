@@ -1,13 +1,13 @@
 #!/bin/bash
+#
+# Run shellcheck on all scipts in this repository
+#
 
-# ECMWFC scripts
-shellcheck ecmwf/offline.claw_install.step1_ecgate
-shellcheck ecmwf/offline.claw_install.step2_lxg
-
-# CSCS scripts
-shellcheck cscs/install.ant
-shellcheck cscs/jenkins.ant
-shellcheck cscs/jenkins.claw
-shellcheck cscs/jenkins.omni-parse
-shellcheck cscs/jenkins.omni
-shellcheck cscs/test.claw
+for script_dir in ecmwf cscs; do
+  for script in ${script_dir}/*; do
+    if ! shellcheck "${script}"; then
+      echo "${script} failed shellcheck test!"
+      exit 1
+    fi
+  done
+done
