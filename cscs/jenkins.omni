@@ -20,7 +20,7 @@ module load "${JAVA_MODULE}"
 
 # Install path by computer and compiler
 # shellcheck disable=SC2154
-OMNI_INSTALL_PATH=/project/c01/install/"$slave"/omni/"$compiler"
+OMNI_INSTALL_PATH=/project/c14/install/"$slave"/omni/"$compiler"
 
 if [ "$compiler" == "gnu" ]; then
   module rm PrgEnv-pgi && module rm PrgEnv-cray
