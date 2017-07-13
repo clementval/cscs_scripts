@@ -16,7 +16,7 @@ if [ "$slave" == "kesch" ]; then
   module load Java
 elif [ "$slave" == "daint" ]; then
   # For Daint
-  export ANT_HOME="/project/c01/install/daint/ant/apache-ant-1.10.1/"
+  export ANT_HOME="/project/c14/install/daint/ant/apache-ant-1.10.1/"
   export PATH=$PATH:$ANT_HOME/bin
   module load CMake
   module load java
@@ -28,7 +28,7 @@ git submodule update
 
 # Install path by computer and compiler
 # shellcheck disable=SC2154
-CLAW_INSTALL_PATH=/project/c01/install/$slave/claw/$compiler
+CLAW_INSTALL_PATH=/project/c14/install/$slave/claw/$compiler
 
 if [ "$compiler" == "gnu" ]; then
   module rm PrgEnv-pgi && module rm PrgEnv-cray
