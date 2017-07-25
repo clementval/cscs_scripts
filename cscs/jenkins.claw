@@ -69,7 +69,3 @@ make all transformation test && make install
 
 # Check license
 ./scripts/check_license
-
-# Check code style
-cd scripts || exit 1
-./run.shellcheck
