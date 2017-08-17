@@ -24,7 +24,7 @@ then
 fi
 
 # First parse test fetch, compile and install CLAW FORTRAN Compiler
-if ! ./cosmo/parse -b test_omni; then
+if ! ./cosmo/parse -o -b test_omni; then
   cat build/cosmo_parse_test.log
   exit 1
 fi
