@@ -1,0 +1,71 @@
+#!/bin/bash -e
+#
+# Copy of the jenkins plan script for the CLAW Compiler build and tests
+#
+
+# Filter:
+# (slave=="kesch" && compiler=="gnu") || (slave=="kesch" && compiler=="pgi") ||
+# (slave=="daint" && compiler=="cray") || (slave=="daint" && compiler=="pgi") ||
+# (slave=="daint" && compiler=="gnu")
+
+module load git
+
+# shellcheck disable=SC2154
+if [ "$slave" == "kesch" ]; then
+  module load cmake
+  module load Java
+elif [ "$slave" == "daint" ]; then
+  # For Daint
+  export ANT_HOME="/project/c14/install/daint/ant/apache-ant-1.9.9/"
+  export PATH=$PATH:$ANT_HOME/bin
+  module load CMake
+  module load java
+fi
+
+# Get OMNI Compiler as submodule
+git submodule init
+git submodule update --remote
+
+# Install path by computer and compiler
+# shellcheck disable=SC2154
+CLAW_INSTALL_PATH=/project/c14/install/$slave/claw/$compiler
+
+if [ "$compiler" == "gnu" ]; then
+  module rm PrgEnv-pgi && module rm PrgEnv-cray
+  module load PrgEnv-gnu
+  if [ "$slave" == "kesch" ]; then
+    FC=gfortran CC=gcc CXX=g++ cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" .
+  elif [ "$slave" == "daint" ]; then
+    module load cudatoolkit
+    # On Daint the cray wrapper must be used regardless the compiling env.
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
+  fi
+elif [ "$compiler" == "pgi" ]; then
+  module rm PrgEnv-gnu && module rm PrgEnv-cray
+  module load PrgEnv-pgi
+  if [ "$slave" == "kesch" ]; then
+    module load GCC
+    cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" .
+  elif [ "$slave" == "daint" ]; then
+    module load cudatoolkit
+    # On Daint the cray wrapper must be used regardless the compiling env.
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
+  fi
+elif [ "$compiler" == "cray" ]; then
+  if [ "$slave" == "kesch" ]; then
+    module load PrgEnv-cray
+    module load GCC
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" .
+  elif [ "$slave" == "daint" ]; then
+    export CRAYPE_LINK_TYPE=dynamic
+    module load daint-gpu
+    module load PrgEnv-cray
+    FC=ftn CC=cc CXX=CC cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" .
+  fi
+fi
+
+# Compile and run unit tests
+make all transformation test && make install
+
+# Check license
+./scripts/check_license
