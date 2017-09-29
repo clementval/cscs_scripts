@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -e -l
 
 #
 # Jenkins script for the OMNI Compiler parsing test

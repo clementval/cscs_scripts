@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -e -l
 #
 # Copy of the jenkins plan script for the CLAW Compiler build and tests
 #

@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -e -l
 #
 # Copy of the jenkins plan to install ant
 #
