@@ -5,4 +5,4 @@ set -e
 # Copy of the jenkins plan to install ant
 #
 
-./install.ant -i /project/c14/install/daint/ant/
+./cscs/install.ant -i /project/c14/install/daint/ant/
