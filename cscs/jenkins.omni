@@ -1,4 +1,6 @@
-#!/bin/bash -e -l
+#!/bin/bash -e
+set -l
+
 #
 # Copy of the jenkins plan script for the OMNI Compiler build test
 #
