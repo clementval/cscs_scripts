@@ -1,5 +1,5 @@
-#!/bin/bash -e
-set -l
+#!/bin/bash -l
+set -e
 
 #
 # Jenkins script for the OMNI Compiler parsing test
