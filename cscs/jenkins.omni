@@ -1,6 +1,4 @@
-#!/bin/bash -l
-set -e
-
+#!/bin/bash -e -l
 #
 # Copy of the jenkins plan script for the OMNI Compiler build test
 #
@@ -10,19 +8,17 @@ set -e
 # (slave=="daint" && compiler=="cray") || (slave=="daint" && compiler=="pgi") ||
 # (slave=="daint" && compiler=="gnu")
 
-JAVA_MODULE="Java"
-
-# shellcheck disable=SC2154
-if [ "$slave" == "daint" ]; then
-  JAVA_MODULE="java"
-fi
-
 module load git
-module load "${JAVA_MODULE}"
+module load java
 
 # Install path by computer and compiler
 # shellcheck disable=SC2154
 OMNI_INSTALL_PATH=/project/c14/install/"$slave"/omni/"$compiler"
+
+if [ "$slave" == "kesch" ]; then
+  export YACC="bison -y"
+fi
+
 
 if [ "$compiler" == "gnu" ]; then
   module rm PrgEnv-pgi && module rm PrgEnv-cray
