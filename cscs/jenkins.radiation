@@ -5,22 +5,23 @@
 # git repo: git@github.com:MeteoSwiss-APN/physics-standalone.git
 #
 
+module load cmake
+
 # Fectch submodules for pp_ser
 git submodule init
 git submodule update --remote
 
-install_location=/project/c14/install
-
 # shellcheck disable=SC2154
-PATH=${install_location}/"${slave}"/claw/pgi/bin:$PATH
-export PATH
+install_location="/project/c14/install/${slave}"
 
 # compiler can be cray or pgi
-compiler="pgi"
+compiler="cray"
+
+CLAWFC_PATH="${install_location}/claw/${compiler}/bin/clawfc"
 
 # Show version and env for debugging
-clawfc --version
-clawfc --show-env
+${CLAWFC_PATH} --version
+${CLAWFC_PATH} --show-env
 
 # shellcheck disable=SC2154
 cd radiation/"${version}" || exit 1
@@ -44,16 +45,18 @@ fi
 
 # shellcheck disable=SC1091
 source ../modules_fortran.env
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/cray/cce/8.4.0/craylibs/x86-64/
 
 if [ "${target}" == "gpu" ]; then
   export G2G=1
-  salloc --time=00:05:00 --partition=debug --ntasks=1 --gres=gpu:1 srun -n 1 ./standalone
+  salloc --time=00:05:00 --partition=debug --ntasks=1 --gres=gpu:1 srun -n 1 ../build/standalone
 else
-  salloc --time=00:05:00 --partition=debug --ntasks=1 srun -n 1 ./standalone
+  salloc --time=00:05:00 --partition=debug --ntasks=1 srun -n 1 ../build/standalone
 fi
 
+module load python/3.6.2-gmvolf-17.02
+export PYTHONPATH="${install_location}"/serialbox2/"${compiler}"/python/
+
 # Compare results
-if ! ${install_location}/"${slave}"/serialbox/gnu/bin/compare Field_rank0.json radiation-standalone_rank0.json; then
+if ! "${install_location}"/serialbox2/"${compiler}"/python/compare/compare.py -s ".*-out" -w MetaData-Field_rank0.json MetaData-radiation-standalone_rank0.json; then
   exit 1
 fi
