@@ -1,0 +1,60 @@
+#!/bin/bash -e
+#
+# Copy of the jenkins plan script for the standalone radiation build and tests.
+#
+# git repo: git@github.com:MeteoSwiss-APN/physics-standalone.git
+#
+
+module load cmake
+module load git
+
+# shellcheck disable=SC2154
+install_location="/project/c14/install/${slave}"
+
+# compiler can be cray or pgi
+compiler="cray"
+
+PATH="${install_location}/claw/${compiler}/bin":$PATH
+export PATH
+
+# Show version and env for debugging
+clawfc --version
+clawfc --show-env
+
+# shellcheck disable=SC2154
+cd claw/rrtmgp/rrtmgp_solver_one_column/build || exit 1
+
+if [ "${compiler}" == "cray" ]; then
+  module load PrgEnv-cray
+  module load craype-accel-nvidia35
+fi
+
+
+make switch-${compiler}
+make
+
+cd ../run || exit 1
+
+
+# Get the correct serialbox data
+./get_data sw_solver_noscat
+
+module load python/3.6.2-gmvolf-17.02
+export PYTHONPATH="${install_location}"/serialbox2/"${compiler}"/python/
+
+# Run the one column std
+salloc --time=00:05:00 --partition=debug --ntasks=1 srun -n 1 ../build/std_driver
+
+# Compare results
+if ! "${install_location}"/serialbox2/"${compiler}"/python/compare/compare.py -s ".*-out" -w MetaData-rrtmgp-sw_solver_noscat_original.json MetaData-rrtmgp-sw_solver_noscat_testout.json; then
+  exit 1
+fi
+
+# Run the OpenACC/GPU executable
+export G2G=1
+salloc --time=00:05:00 --partition=debug --ntasks=1 --gres=gpu:1 srun -n 1 ../build/claw_openacc_driver
+
+# Compare results
+if ! "${install_location}"/serialbox2/"${compiler}"/python/compare/compare.py -s ".*-out" -w MetaData-rrtmgp-sw_solver_noscat_original.json MetaData-rrtmgp-sw_solver_noscat_testout.json; then
+  exit 1
+fi
