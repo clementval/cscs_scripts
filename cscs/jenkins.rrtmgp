@@ -58,3 +58,45 @@ salloc --time=00:05:00 --partition=debug --ntasks=1 --gres=gpu:1 srun -n 1 ../bu
 if ! "${install_location}"/serialbox2/"${compiler}"/python/compare/compare.py -s ".*-out" -w MetaData-rrtmgp-sw_solver_noscat_original.json MetaData-rrtmgp-sw_solver_noscat_testout.json; then
   exit 1
 fi
+
+
+./get_data sw_solver_twostream
+
+# Run the one column std
+salloc --time=00:05:00 --partition=debug --ntasks=1 srun -n 1 ../build/std_driver
+
+# Compare results
+if ! "${install_location}"/serialbox2/"${compiler}"/python/compare/compare.py -s ".*-out" -w MetaData-rrtmgp-sw_solver_twostream_original.json MetaData-rrtmgp-sw_solver_twostream_testout.json; then
+  exit 1
+fi
+
+# Run the OpenACC/GPU executable
+export G2G=1
+salloc --time=00:05:00 --partition=debug --ntasks=1 --gres=gpu:1 srun -n 1 ../build/claw_openacc_driver
+
+# Compare results
+if ! "${install_location}"/serialbox2/"${compiler}"/python/compare/compare.py -s ".*-out" -w MetaData-rrtmgp-sw_solver_twostream_original.json MetaData-rrtmgp-sw_solver_twostream_testout.json; then
+  exit 1
+fi
+
+
+
+
+# Get the correct serialbox data
+./get_data sw_solver_2stream
+# Run the one column std
+salloc --time=00:05:00 --partition=debug --ntasks=1 srun -n 1 ../build/std_driver
+
+# Compare results
+if ! "${install_location}"/serialbox2/"${compiler}"/python/compare/compare.py -s ".*-out" -w MetaData-rrtmgp-sw_solver_2stream_inputs.json MetaData-rrtmgp-sw_solver_2stream_testout.json; then
+  exit 1
+fi
+
+# Run the OpenACC/GPU executable
+export G2G=1
+salloc --time=00:05:00 --partition=debug --ntasks=1 --gres=gpu:1 srun -n 1 ../build/claw_openacc_driver
+
+# Compare results
+#if ! "${install_location}"/serialbox2/"${compiler}"/python/compare/compare.py -t 10e-8 -s ".*-out" -w MetaData-rrtmgp-sw_solver_2stream_original.json MetaData-rrtmgp-sw_solver_2stream_testout.json; then
+#  exit 1
+#fi
