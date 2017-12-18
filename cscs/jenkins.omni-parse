@@ -1,5 +1,4 @@
-#!/bin/bash -l
-set -e
+#!/bin/bash -e
 
 #
 # Jenkins script for the OMNI Compiler parsing test
@@ -25,7 +24,7 @@ then
 fi
 
 # First parse test fetch, compile and install CLAW FORTRAN Compiler
-if ! ./cosmo/parse -o -b test_omni; then
+if ! ./cosmo/parse -n -b merged_omni; then
   cat build/cosmo_parse_test.log
   exit 1
 fi
