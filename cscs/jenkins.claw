@@ -93,4 +93,5 @@ fi
 make all transformation test && make install
 
 # Check license
+cd ..
 ./scripts/check_license
