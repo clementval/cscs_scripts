@@ -12,10 +12,10 @@ function show_help()
 }
 
 # Define local variable
-ANT_TAR="apache-ant-1.9.9-bin.tar.gz"
-ANT_BINARY="http://mirror.switch.ch/mirror/apache/dist/ant/binaries/${ANT_TAR}"
+ANT_TAR="apache-ant-1.10.2-bin.tar.gz"
+ANT_BINARY="http://mirror.easyname.ch/apache//ant/binaries/${ANT_TAR}"
 ANT_INSTALL_PATH=""
-ANT_EXTRACTED_DIR="apache-ant-1.9.9"
+ANT_EXTRACTED_DIR="apache-ant-1.10.2"
 
 while getopts "hi:" opt; do
   case "$opt" in
