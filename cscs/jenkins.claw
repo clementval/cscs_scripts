@@ -95,6 +95,9 @@ fi
 # Compile and run unit tests
 make all transformation test && make install
 
+# Make clawfc accessible to other
+chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/bin/clawfc
+
 # Check license
 cd ..
 ./scripts/check_license
