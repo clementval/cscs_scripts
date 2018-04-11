@@ -96,7 +96,9 @@ fi
 make all transformation test && make install
 
 # Make clawfc accessible to other
-chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/bin/clawfc
+chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/bin/*
+chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/libexec/*
+chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/etc/*
 
 # Check license
 cd ..
