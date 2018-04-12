@@ -19,6 +19,9 @@ elif [ "${slave}" == "daint" ]; then
   # For Daint
   module load CMake
   module load java
+elif [ "${slave}" == "tave" ]; then
+  # For Tave
+  module load java
 fi
 
 # Get OMNI Compiler as submodule
@@ -66,20 +69,16 @@ elif [ "${compiler}" == "cray" ]; then
   if [ "${slave}" == "kesch" ]; then
     module load PrgEnv-cray
     module load gcc
-    export FC=ftn
-    export CC=cc
-    export CXX=CC
   elif [ "${slave}" == "daint" ]; then
     module load daint-gpu
     module load PrgEnv-cray
     export CRAYPE_LINK_TYPE=dynamic
-    export FC=ftn
-    export CC=cc
-    export CXX=CC
   fi
+  export FC=ftn
+  export CC=cc
+  export CXX=CC
 elif [ "${compiler}" == "intel" ]; then
   module load PrgEnv-intel
-
 fi
 
 # shellcheck disable=SC2154
@@ -99,6 +98,9 @@ make all transformation test && make install
 chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/bin/*
 chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/libexec/*
 chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/etc/*
+
+# Clean any potential files on temp
+rm -rf /tmp/__omni_tmp__*
 
 # Check license
 cd ..
