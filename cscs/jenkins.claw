@@ -77,9 +77,8 @@ elif [ "${compiler}" == "cray" ]; then
   export CC=cc
   export CXX=CC
 elif [ "${compiler}" == "intel" ]; then
-  if [ "${slave}" == "daint" ]; then
+  if [[ "${slave}" == "daint" ]] || [[ "${slave}" == "tave" ]]; then
     module load PrgEnv-intel
-    module load java
     module load gcc
     export FC=ftn
     export CC=gcc
@@ -106,7 +105,7 @@ chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/libexec/*
 chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/etc/*
 
 # Clean any potential files on temp
-rm -rf /tmp/__omni_tmp__*
+# rm -rf /tmp/__omni_tmp__*
 
 # Check license
 cd ..
