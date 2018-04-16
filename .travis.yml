@@ -6,6 +6,7 @@ addons:
     - ubuntu-toolchain-r-test
     packages:
     - cabal-install
+    - ghc # cabal dependency
 
 # Check scrips for warnings/errors
 before_install:
