@@ -33,21 +33,21 @@ CLAW_INSTALL_PATH=/project/c14/install/${slave}/claw/${compiler}
 
 mkdir build && cd build
 
-if [ "${compiler}" == "gnu" ]; then
+if [[ "${compiler}" == "gnu" ]]; then
   module rm PrgEnv-pgi && module rm PrgEnv-cray
   module load PrgEnv-gnu
-  if [ "${slave}" == "kesch" ]; then
+  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "tave" ]]; then
     export FC=gfortran
     export CC=gcc
     export CXX=g++
-  elif [ "${slave}" == "daint" ]; then
+  elif [[ "${slave}" == "daint" ]]; then
     module load cudatoolkit
     # On Daint the cray wrapper must be used regardless the compiling env.
     export FC=ftn
     export CC=cc
     export CXX=CC
   fi
-elif [ "${compiler}" == "pgi" ]; then
+elif [[ "${compiler}" == "pgi" ]]; then
   module rm PrgEnv-gnu && module rm PrgEnv-cray
   module load PrgEnv-pgi
   if [ "${slave}" == "kesch" ]; then
@@ -64,36 +64,52 @@ elif [ "${compiler}" == "pgi" ]; then
     export CC=gcc
     export CXX=g++
   fi
-elif [ "${compiler}" == "cray" ]; then
+elif [[ "${compiler}" == "cray" ]]; then
+  module load PrgEnv-cray
   if [ "${slave}" == "kesch" ]; then
-    module load PrgEnv-cray
     module load gcc
+    export CC=cc
+	export CXX=CC
   elif [ "${slave}" == "daint" ]; then
     module load daint-gpu
-    module load PrgEnv-cray
     export CRAYPE_LINK_TYPE=dynamic
+    export CC=cc
+    export CXX=CC
+  elif [ "${slave}" == "tave" ]; then
+    module load gcc
+    export CC=gcc
+	export CXX=g++
   fi
   export FC=ftn
-  export CC=cc
-  export CXX=CC
-elif [ "${compiler}" == "intel" ]; then
-  if [[ "${slave}" == "daint" ]] || [[ "${slave}" == "tave" ]]; then
-    module load PrgEnv-intel
-    module load gcc
-    export FC=ftn
-    export CC=gcc
-    export CXX=g++
-  fi
+elif [[ "${compiler}" == "intel" ]]; then
+  # Only for Piz Daint and Grande Tave
+  module rm PrgEnv-gnu
+  module rm PrgEnv-cray
+  module rm PrgEnv-pgi
+  module load PrgEnv-intel
+  module load gcc
+  export FC=ftn
+  export CC=gcc
+  export CXX=g++
+fi
+
+# Workaround to avoid buggy Perl installation
+if [[ "${slave}" == "tave" ]]; then
+  module rm Perl
 fi
 
 # shellcheck disable=SC2154
 export ANT_HOME="/project/c14/install/${slave}/ant/apache-ant-1.10.2/"
 export PATH=$ANT_HOME/bin:$PATH
 
+module list # display currently loaded module
+
 if [ "${slave}" == "kesch" ]; then
   cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" ..
-elif [ "${slave}" == "daint" ] || [ "${slave}" == "tave" ]; then
+elif [ "${slave}" == "daint" ]; then
   cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" ..
+elif [ "${slave}" == "tave" ]; then
+  CC=gcc CXX=g++ cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" ..
 fi
 
 # Compile and run unit tests
