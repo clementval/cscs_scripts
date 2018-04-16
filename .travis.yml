@@ -3,11 +3,15 @@ language: bash
 addons:
   apt:
     sources:
-    - debian-sid    # Grab ShellCheck from the Debian repo
+    - ubuntu-toolchain-r-test
     packages:
-    - shellcheck
+    - cabal-install
 
 # Check scrips for warnings/errors
+before_install:
+  - cabal update && cabal install ShellCheck
+  - export PATH=$PATH:$HOME/.cabal/bin
+  - shellcheck --version
 script:
   - ./run.shellcheck
 
