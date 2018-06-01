@@ -69,7 +69,7 @@ elif [[ "${compiler}" == "cray" ]]; then
   if [ "${slave}" == "kesch" ]; then
     module load gcc
     export CC=cc
-	export CXX=CC
+    export CXX=CC
   elif [ "${slave}" == "daint" ]; then
     module load daint-gpu
     export CRAYPE_LINK_TYPE=dynamic
@@ -78,7 +78,7 @@ elif [[ "${compiler}" == "cray" ]]; then
   elif [ "${slave}" == "tave" ]; then
     module load gcc
     export CC=gcc
-	export CXX=g++
+    export CXX=g++
   fi
   export FC=ftn
 elif [[ "${compiler}" == "intel" ]]; then
