@@ -24,6 +24,10 @@ while getopts "hi:" opt; do
     exit 0
     ;;
   i) ANT_INSTALL_PATH=$OPTARG ;;
+  *)
+    show_help
+    exit 0
+    ;;
   esac
 done
 

@@ -48,6 +48,10 @@ while getopts "hfb:c:i:o:" opt; do
     CLAW_OFFLINE=true
     CLAW_OFFLINE_TAR=$OPTARG
     ;;
+  *)
+    show_help
+    exit 0
+    ;;
   esac
 done
 
