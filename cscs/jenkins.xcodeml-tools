@@ -1,0 +1,31 @@
+#!/bin/bash -l
+set -e
+#
+# Copy of the jenkins plan script for the OMNI Compiler build test
+#
+
+module load git
+
+# Install path by computer and compiler
+# shellcheck disable=SC2154
+OMNI_INSTALL_PATH=/project/c14/install/"$slave"/omni/"$compiler"
+
+if [[ "${slave}" == "kesch" ]]; then
+  export YACC="bison -y"
+  GCC_MODULE="6.1.0"
+elif [[ "${slave}" == "daint" ]]; then
+  GCC_MODULE="7.2.0"
+  module load craype-accel-nvidia60
+fi
+module load gcc/${GCC_MODULE}
+module load java
+
+# Configure step
+FC=gfortran CC=gcc CXX=g++ ./configure --prefix="$OMNI_INSTALL_PATH"
+
+# Compile and run unit tests
+make
+make install
+
+# Remove installation after success
+rm -rf "$OMNI_INSTALL_PATH"
