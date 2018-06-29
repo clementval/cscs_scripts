@@ -64,6 +64,11 @@ elif [[ "${compiler}" == "pgi" ]]; then
     export FC=ftn
     export CC=gcc
     export CXX=g++
+  elif [ "${slave}" == "tave" ]; then
+    module load PrgEnv-pgi
+    export FC=ftn
+    export CC=gcc
+    export CXX=g++
   fi
 elif [[ "${compiler}" == "cray" ]]; then
   module load PrgEnv-cray
