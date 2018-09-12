@@ -50,7 +50,7 @@ if [[ "${compiler}" == "gnu" ]]; then
 elif [[ "${compiler}" == "pgi" ]]; then
   module rm PrgEnv-gnu && module rm PrgEnv-cray
   if [ "${slave}" == "kesch" ]; then
-    module load PrgEnv-pgi/18.4_gdr
+    module load PrgEnv-pgi
     module load gcc
     export FC=mpif90
     export CC=gcc
