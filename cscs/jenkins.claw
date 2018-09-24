@@ -52,7 +52,7 @@ elif [[ "${compiler}" == "pgi" ]]; then
   if [ "${slave}" == "kesch" ]; then
     module load PrgEnv-pgi
     module load gcc
-    export FC=mpif90
+    export FC=pgfortran
     export CC=gcc
     export CXX=g++
   elif [ "${slave}" == "daint" ]; then
