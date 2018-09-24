@@ -128,6 +128,3 @@ make all install
 chmod 755 /project/c14/install/"${slave}"/"${release_path}"/"${compiler}"/bin/*
 chmod 755 /project/c14/install/"${slave}"/"${release_path}"/"${compiler}"/libexec/*
 chmod 755 /project/c14/install/"${slave}"/"${release_path}"/"${compiler}"/etc/*
-
-# Clean any potential files on temp
-# rm -rf /tmp/__omni_tmp__*
