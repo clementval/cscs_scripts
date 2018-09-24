@@ -1,0 +1,132 @@
+#!/bin/bash -e
+#
+# Copy of the jenkins plan script for the CLAW Compiler build and tests
+#
+
+# Filter:
+# !(slave=="kesch" && compiler=="cray")
+# && !(slave=="kesch" && compiler=="intel")
+
+release_path="claw_${release}"
+
+module load git
+
+# shellcheck disable=SC2154
+if [ "${slave}" == "kesch" ]; then
+  export YACC="bison -y"
+  module load cmake
+  module load java
+elif [ "${slave}" == "daint" ]; then
+  # For Daint
+  module load CMake
+  module load java
+elif [ "${slave}" == "tave" ]; then
+  # For Tave
+  module load java
+fi
+
+# Get OMNI Compiler as submodule
+git submodule init
+git submodule update
+
+# Install path by computer and compiler
+# shellcheck disable=SC2154
+CLAW_INSTALL_PATH=/project/c14/install/${slave}/"${release_path}"/${compiler}
+
+mkdir build && cd build
+
+if [[ "${compiler}" == "gnu" ]]; then
+  module rm PrgEnv-pgi && module rm PrgEnv-cray
+  module load PrgEnv-gnu
+  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "tave" ]]; then
+    export FC=gfortran
+    export CC=gcc
+    export CXX=g++
+  elif [[ "${slave}" == "daint" ]]; then
+    module load cudatoolkit
+    # On Daint the cray wrapper must be used regardless the compiling env.
+    export FC=ftn
+    export CC=cc
+    export CXX=CC
+  fi
+elif [[ "${compiler}" == "pgi" ]]; then
+  module rm PrgEnv-gnu && module rm PrgEnv-cray
+  if [ "${slave}" == "kesch" ]; then
+    module load PrgEnv-pgi
+    module load gcc
+    export FC=mpif90
+    export CC=gcc
+    export CXX=g++
+  elif [ "${slave}" == "daint" ]; then
+    module load PrgEnv-pgi
+    module load cudatoolkit
+    module load gcc/7.1.0
+    # On Daint the cray wrapper must be used regardless the compiling env.
+    # Use GNU gcc for the C/C++ part as PGI is broken.
+    export FC=ftn
+    export CC=gcc
+    export CXX=g++
+  elif [ "${slave}" == "tave" ]; then
+    module load PrgEnv-pgi
+    export FC=ftn
+    export CC=gcc
+    export CXX=g++
+  fi
+elif [[ "${compiler}" == "cray" ]]; then
+  module load PrgEnv-cray
+  if [ "${slave}" == "kesch" ]; then
+    module load gcc
+    export CC=cc
+    export CXX=CC
+  elif [ "${slave}" == "daint" ]; then
+    module load daint-gpu
+    export CRAYPE_LINK_TYPE=dynamic
+    export CC=cc
+    export CXX=CC
+  elif [ "${slave}" == "tave" ]; then
+    module load gcc
+    export CC=gcc
+    export CXX=g++
+  fi
+  export FC=ftn
+elif [[ "${compiler}" == "intel" ]]; then
+  # Only for Piz Daint and Grande Tave
+  module rm PrgEnv-gnu
+  module rm PrgEnv-cray
+  module rm PrgEnv-pgi
+  module load PrgEnv-intel
+  module load gcc
+  export FC=ftn
+  export CC=gcc
+  export CXX=g++
+fi
+
+# Workaround to avoid buggy Perl installation
+if [[ "${slave}" == "tave" ]]; then
+  module rm Perl
+fi
+
+# shellcheck disable=SC2154
+export ANT_HOME="/project/c14/install/${slave}/ant/apache-ant-1.10.2/"
+export PATH=$ANT_HOME/bin:$PATH
+
+module list # display currently loaded module
+
+if [ "${slave}" == "kesch" ]; then
+  cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" ..
+elif [ "${slave}" == "daint" ]; then
+  cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" ..
+elif [ "${slave}" == "tave" ]; then
+  CC=gcc CXX=g++ cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" ..
+fi
+
+# Compile and run unit tests
+make all install
+
+# Make clawfc accessible to other
+chmod 755 /project/c14/install/"${slave}"/"${release_path}"/"${compiler}"/bin/*
+chmod 755 /project/c14/install/"${slave}"/"${release_path}"/"${compiler}"/libexec/*
+chmod 755 /project/c14/install/"${slave}"/"${release_path}"/"${compiler}"/etc/*
+
+# Clean any potential files on temp
+# rm -rf /tmp/__omni_tmp__*
