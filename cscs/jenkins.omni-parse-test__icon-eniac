@@ -13,6 +13,7 @@ git submodule update
 
 test_branch="merge_candidate_3"
 
+#shellcheck disable=SC2154
 export ANT_HOME="/project/c14/install/${slave}/ant/apache-ant-1.10.2/"
 export PATH=$PATH:$ANT_HOME/bin
 
