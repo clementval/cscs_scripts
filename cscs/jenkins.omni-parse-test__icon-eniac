@@ -1,0 +1,36 @@
+#!/bin/bash -e
+
+#
+# Jenkins script for the OMNI Compiler parsing test
+#
+
+module load git
+module rm PrgEnv-pgi && module rm PrgEnv-cray
+module load PrgEnv-gnu
+
+git submodule init
+git submodule update
+
+test_branch="merge_candidate_3"
+
+export ANT_HOME="/project/c14/install/${slave}/ant/apache-ant-1.10.2/"
+export PATH=$PATH:$ANT_HOME/bin
+
+# shellcheck disable=SC2154
+if [ "$slave" == "kesch" ]
+then
+  module load cmake
+  module load Java
+elif [ "$slave" == "daint" ]
+then
+  # For Daint
+  module load CMake
+  module load java
+  module load cudatoolkit
+fi
+
+if ! ./icon/parse  -b ${test_branch}; then
+  cat build/icon_vdiff_up.log
+  echo "ICON-ENIAC PARSING FAILED!!!"
+  exit 1
+fi
