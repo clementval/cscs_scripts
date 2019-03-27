@@ -13,15 +13,20 @@ release_path="claw_${release}"
 module load git
 
 # shellcheck disable=SC2154
-if [ "${slave}" == "kesch" ]; then
+if [ "${slave}" == "kesch-test" ]; then
+  module load PE/17.06
+fi
+
+# shellcheck disable=SC2154
+if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]]; then
   export YACC="bison -y"
   module load cmake
   module load java
-elif [ "${slave}" == "daint" ]; then
+elif [[ "${slave}" == "daint" ]]; then
   # For Daint
   module load CMake
   module load java
-elif [ "${slave}" == "tave" ]; then
+elif [[ "${slave}" == "tave" ]]; then
   # For Tave
   module load java
 fi
@@ -39,7 +44,7 @@ mkdir build && cd build
 if [[ "${compiler}" == "gnu" ]]; then
   module rm PrgEnv-pgi && module rm PrgEnv-cray
   module load PrgEnv-gnu
-  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "tave" ]]; then
+  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]] || [[ "${slave}" == "tave" ]]; then
     export FC=gfortran
     export CC=gcc
     export CXX=g++
@@ -52,13 +57,13 @@ if [[ "${compiler}" == "gnu" ]]; then
   fi
 elif [[ "${compiler}" == "pgi" ]]; then
   module rm PrgEnv-gnu && module rm PrgEnv-cray
-  if [ "${slave}" == "kesch" ]; then
+  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]]; then
     module load PrgEnv-pgi
     module load gcc
     export FC=pgfortran
     export CC=gcc
     export CXX=g++
-  elif [ "${slave}" == "daint" ]; then
+  elif [[ "${slave}" == "daint" ]]; then
     module load PrgEnv-pgi
     module load cudatoolkit
     module load gcc/7.1.0
@@ -67,24 +72,29 @@ elif [[ "${compiler}" == "pgi" ]]; then
     export FC=ftn
     export CC=gcc
     export CXX=g++
-  elif [ "${slave}" == "tave" ]; then
+  elif [[ "${slave}" == "tave" ]]; then
     module load PrgEnv-pgi
     export FC=ftn
     export CC=gcc
     export CXX=g++
   fi
 elif [[ "${compiler}" == "cray" ]]; then
-  module load PrgEnv-cray
-  if [ "${slave}" == "kesch" ]; then
+  if [[ "${slave}" == "kesch-test" ]]; then
+    module load PrgEnv-CrayCCE/17.06
+  else
+    module load PrgEnv-cray
+  fi
+
+  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]]; then
     module load gcc
     export CC=cc
     export CXX=CC
-  elif [ "${slave}" == "daint" ]; then
+  elif [[ "${slave}" == "daint" ]]; then
     module load daint-gpu
     export CRAYPE_LINK_TYPE=dynamic
     export CC=cc
     export CXX=CC
-  elif [ "${slave}" == "tave" ]; then
+  elif [[ "${slave}" == "tave" ]]; then
     module load gcc
     export CC=gcc
     export CXX=g++
@@ -113,11 +123,11 @@ export PATH=$ANT_HOME/bin:$PATH
 
 module list # display currently loaded module
 
-if [ "${slave}" == "kesch" ]; then
+if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]]; then
   cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" ..
-elif [ "${slave}" == "daint" ]; then
+elif [[ "${slave}" == "daint" ]]; then
   cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" ..
-elif [ "${slave}" == "tave" ]; then
+elif [[ "${slave}" == "tave" ]]; then
   CC=gcc CXX=g++ cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" ..
 fi
 
