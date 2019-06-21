@@ -9,13 +9,9 @@
 
 module load git
 
-# shellcheck disable=SC2154
-if [ "${slave}" == "kesch-test" ]; then
-  module load PE/17.06
-fi
-
-if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]]; then
+if [[ "${slave}" == "kesch" ]]; then
   export YACC="bison -y"
+  module load PE/17.06
   module load cmake
   module load java
 elif [[ "${slave}" == "daint" ]]; then
