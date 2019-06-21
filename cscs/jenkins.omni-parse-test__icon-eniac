@@ -20,6 +20,7 @@ export PATH=$PATH:$ANT_HOME/bin
 # shellcheck disable=SC2154
 if [ "$slave" == "kesch" ]
 then
+  module load PE/17.06
   module load cmake
   module load Java
 elif [ "$slave" == "daint" ]

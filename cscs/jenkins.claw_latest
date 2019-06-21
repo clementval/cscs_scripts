@@ -17,6 +17,7 @@ export PATH=$ANT_HOME/bin:$PATH
 # shellcheck disable=SC2154
 if [ "${slave}" == "kesch" ]; then
   export YACC="bison -y"
+  module load PE/17.06
   module load cmake
   module load java
 elif [ "${slave}" == "daint" ]; then

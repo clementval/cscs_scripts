@@ -5,6 +5,7 @@
 # git repo: git@github.com:MeteoSwiss-APN/physics-standalone.git
 #
 
+module load PE/17.06
 module load cmake
 module load git
 

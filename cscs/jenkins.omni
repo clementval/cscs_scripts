@@ -21,6 +21,7 @@ OMNI_INSTALL_PATH=/project/c14/install/"$slave"/omni/"$compiler"
 
 if [ "$slave" == "kesch" ]; then
   export YACC="bison -y"
+  module load PE/17.06
 fi
 
 
