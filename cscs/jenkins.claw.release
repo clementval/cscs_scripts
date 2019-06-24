@@ -13,13 +13,14 @@ release_path="claw_${release}"
 module load git
 
 # shellcheck disable=SC2154
-if [ "${slave}" == "kesch-test" ]; then
-  module load PE/17.06
-fi
-
-# shellcheck disable=SC2154
-if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]]; then
+if [ "${slave}" == "arolla" ]; then
+  module load cmake
   export YACC="bison -y"
+  export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64"
+# shellcheck disable=SC2154
+elif [[ "${slave}" == "kesch" ]]; then
+  export YACC="bison -y"
+  module load PE/17.06
   module load cmake
   module load java
 elif [[ "${slave}" == "daint" ]]; then
@@ -79,22 +80,24 @@ elif [[ "${compiler}" == "pgi" ]]; then
     export CXX=g++
   fi
 elif [[ "${compiler}" == "cray" ]]; then
-  if [[ "${slave}" == "kesch-test" ]]; then
-    module load PrgEnv-CrayCCE/17.06
-  else
+  if [[ "${slave}" == "arolla" ]]; then
+    module load cce/8.7.7
+    module load gcc/7.2.0
+    export CC=gcc
+    export CXX=g++
+  elif [[ "${slave}" == "kesch" ]]; then
     module load PrgEnv-cray
-  fi
-
-  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]]; then
     module load gcc
     export CC=cc
     export CXX=CC
   elif [[ "${slave}" == "daint" ]]; then
+    module load PrgEnv-cray
     module load daint-gpu
     export CRAYPE_LINK_TYPE=dynamic
     export CC=cc
     export CXX=CC
   elif [[ "${slave}" == "tave" ]]; then
+    module load PrgEnv-cray
     module load gcc
     export CC=gcc
     export CXX=g++
@@ -123,7 +126,7 @@ export PATH=$ANT_HOME/bin:$PATH
 
 module list # display currently loaded module
 
-if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]]; then
+if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "arolla" ]]; then
   cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" ..
 elif [[ "${slave}" == "daint" ]]; then
   cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" ..
