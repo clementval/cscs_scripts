@@ -81,6 +81,7 @@ elif [[ "${compiler}" == "pgi" ]]; then
   fi
 elif [[ "${compiler}" == "cray" ]]; then
   if [[ "${slave}" == "arolla" ]]; then
+    module load PrgEnv-cray
     module load cce/8.7.7
     module load gcc/7.2.0
     export CC=gcc
