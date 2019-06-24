@@ -13,11 +13,10 @@ release_path="claw_${release}"
 module load git
 
 # shellcheck disable=SC2154
-if [ "${slave}" == "arolla" ]; then
+if [[ "${slave}" == "arolla" ]]; then
   module load cmake
   export YACC="bison -y"
   export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64"
-# shellcheck disable=SC2154
 elif [[ "${slave}" == "kesch" ]]; then
   export YACC="bison -y"
   module load PE/17.06

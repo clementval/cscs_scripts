@@ -8,7 +8,7 @@
 # && !(slave=="kesch" && compiler=="intel")
 
 module load git
-
+# shellcheck disable=SC2154
 if [[ "${slave}" == "arolla" ]]; then
   module load cmake
   export YACC="bison -y"
