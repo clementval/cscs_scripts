@@ -44,7 +44,7 @@ mkdir build && cd build
 if [[ "${compiler}" == "gnu" ]]; then
   module rm PrgEnv-pgi && module rm PrgEnv-cray
   module load PrgEnv-gnu
-  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]] || [[ "${slave}" == "tave" ]]; then
+  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "arolla" ]] || [[ "${slave}" == "tave" ]]; then
     export FC=gfortran
     export CC=gcc
     export CXX=g++
@@ -57,7 +57,7 @@ if [[ "${compiler}" == "gnu" ]]; then
   fi
 elif [[ "${compiler}" == "pgi" ]]; then
   module rm PrgEnv-gnu && module rm PrgEnv-cray
-  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]]; then
+  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "arolla" ]]; then
     module load PrgEnv-pgi
     module load gcc
     export FC=pgfortran
