@@ -58,7 +58,11 @@ if [[ "${compiler}" == "gnu" ]]; then
 elif [[ "${compiler}" == "pgi" ]]; then
   module rm PrgEnv-gnu && module rm PrgEnv-cray
   if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "arolla" ]]; then
-    module load PrgEnv-pgi
+    if [[ "${slave}" == "kesch" ]]; then
+      module load PrgEnv-pgi
+    else
+      module load PrgEnv-pgi/19.4
+    fi
     module load gcc
     export FC=pgfortran
     export CC=gcc
