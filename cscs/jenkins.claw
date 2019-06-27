@@ -40,7 +40,7 @@ mkdir build && cd build
 if [[ "${compiler}" == "gnu" ]]; then
   module rm PrgEnv-pgi && module rm PrgEnv-cray
   module load PrgEnv-gnu
-  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "tave" ]] || [[ "${slave}" == "kesch-test" ]]; then
+  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "tave" ]] || [[ "${slave}" == "arolla" ]]; then
     export FC=gfortran
     export CC=gcc
     export CXX=g++
@@ -53,8 +53,12 @@ if [[ "${compiler}" == "gnu" ]]; then
   fi
 elif [[ "${compiler}" == "pgi" ]]; then
   module rm PrgEnv-gnu && module rm PrgEnv-cray
-  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "kesch-test" ]]; then
-    module load PrgEnv-pgi
+  if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "arolla" ]]; then
+    if [[ "${slave}" == "kesch" ]]; then
+      module load PrgEnv-pgi
+    else
+      module load PrgEnv-pgi/19.4
+    fi
     module load gcc
     export FC=pgfortran
     export CC=gcc
@@ -121,9 +125,7 @@ module list # display currently loaded module
 
 if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "arolla" ]]; then
   cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" ..
-elif [[ "${slave}" == "daint" ]]; then
-  cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" ..
-elif [[ "${slave}" == "tave" ]]; then
+elif [[ "${slave}" == "daint" ]] || [[ "${slave}" == "tave" ]]; then
   cmake -DCMAKE_INSTALL_PREFIX="$CLAW_INSTALL_PATH" -DOMNI_MPI_CC="MPI_CC=cc" -DOMNI_MPI_FC="MPI_FC=ftn" ..
 fi
 
