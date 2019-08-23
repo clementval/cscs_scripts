@@ -15,7 +15,7 @@ if [[ "${slave}" == "arolla" ]]; then
   export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64"
 elif [[ "${slave}" == "kesch" ]]; then
   export YACC="bison -y"
-  module load PE/17.06
+  module load PE/18.12
   module load cmake
   module load java
 elif [[ "${slave}" == "daint" ]]; then
@@ -33,7 +33,7 @@ git submodule update
 
 # Install path by computer and compiler
 # shellcheck disable=SC2154
-CLAW_INSTALL_PATH=/project/c14/install/${slave}/claw/${compiler}
+CLAW_INSTALL_PATH=/project/c14/install/${slave}/claw/master/${compiler}
 
 mkdir build && cd build
 
@@ -55,7 +55,7 @@ elif [[ "${compiler}" == "pgi" ]]; then
   module rm PrgEnv-gnu && module rm PrgEnv-cray
   if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "arolla" ]]; then
     if [[ "${slave}" == "kesch" ]]; then
-      module load pgi_PE/18.10
+      module load PrgEnv-pgi
     else
       module load PrgEnv-pgi/19.4
     fi
@@ -133,9 +133,9 @@ fi
 make all transformation test && make install
 
 # Make clawfc accessible to other
-chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/bin/*
-chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/libexec/*
-chmod 755 /project/c14/install/"${slave}"/claw/"${compiler}"/etc/*
+chmod 755 /project/c14/install/"${slave}"/claw/master/"${compiler}"/bin/*
+chmod 755 /project/c14/install/"${slave}"/claw/master/"${compiler}"/libexec/*
+chmod 755 /project/c14/install/"${slave}"/claw/master/"${compiler}"/etc/*
 
 # Clean any potential files on temp
 # rm -rf /tmp/__omni_tmp__*

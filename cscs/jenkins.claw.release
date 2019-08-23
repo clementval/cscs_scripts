@@ -8,7 +8,7 @@
 # && !(slave=="kesch" && compiler=="intel")
 
 # shellcheck disable=SC2154
-release_path="claw_${release}"
+release_path="claw/${release}"
 
 module load git
 
@@ -19,7 +19,7 @@ if [[ "${slave}" == "arolla" ]]; then
   export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64"
 elif [[ "${slave}" == "kesch" ]]; then
   export YACC="bison -y"
-  module load PE/17.06
+  module load PE/18.12
   module load cmake
   module load java
 elif [[ "${slave}" == "daint" ]]; then
