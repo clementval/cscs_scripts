@@ -55,7 +55,7 @@ elif [[ "${compiler}" == "pgi" ]]; then
   module rm PrgEnv-gnu && module rm PrgEnv-cray
   if [[ "${slave}" == "kesch" ]] || [[ "${slave}" == "arolla" ]]; then
     if [[ "${slave}" == "kesch" ]]; then
-      module load PrgEnv-pgi
+      module load pgi_PE/18.10
     else
       module load PrgEnv-pgi/19.4
     fi
