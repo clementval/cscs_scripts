@@ -11,19 +11,16 @@
 module load git
 
 # shellcheck disable=SC2154
-export ANT_HOME="/project/c14/install/${slave}/ant/apache-ant-1.9.9/"
+export ANT_HOME="/project/c14/install/${slave}/ant/apache-ant-1.10.2/"
 export PATH=$ANT_HOME/bin:$PATH
 
 # shellcheck disable=SC2154
 if [ "${slave}" == "kesch" ]; then
   export YACC="bison -y"
-  module load PE/17.06
+  module load PE/18.12
   module load cmake
   module load java
 elif [ "${slave}" == "daint" ]; then
-  # For Daint
-  export ANT_HOME="/project/c14/install/daint/ant/apache-ant-1.9.9/"
-  export PATH=$PATH:$ANT_HOME/bin
   module load CMake
   module load java
 fi
@@ -34,7 +31,7 @@ git submodule update --remote
 
 # Install path by computer and compiler
 # shellcheck disable=SC2154
-CLAW_INSTALL_PATH=/project/c14/install/${slave}/claw/${compiler}
+CLAW_INSTALL_PATH=/project/c14/install/${slave}/claw/master/${compiler}
 
 mkdir build && cd build
 
@@ -73,7 +70,7 @@ elif [ "${compiler}" == "cray" ]; then
 fi
 
 # Compile and run unit tests
-make all transformation test && make install
+make all transformation test
 
 # Check license
 cd ..
