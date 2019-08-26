@@ -21,7 +21,8 @@ serialbox_dir="${install_location}/serialbox2/serialbox2_v2.4.3/${compiler}"
 # Compary tool
 serialbox_compare="${serialbox_dir}"/python/compare/compare.py
 
-PATH="${install_location}/claw/master/${compiler}/bin":$PATH
+CLAWFC_PATH="${install_location}/claw/master/${compiler}/bin/clawfc"
+PATH="${install_location}/claw/master/${compiler}/bin/":${PATH}
 export PATH
 
 # Show version and env for debugging

@@ -21,8 +21,8 @@ PATH="${install_location}/claw/master/${compiler}/bin":$PATH
 export PATH
 
 # Show version and env for debugging
-${CLAWFC_PATH} --version
-${CLAWFC_PATH} --show-env
+clawfc --version
+clawfc --show-env
 
 # shellcheck disable=SC2154
 cd radiation/"${version}" || exit 1
@@ -58,6 +58,6 @@ module load python/3.6.2-gmvolf-17.02
 export PYTHONPATH="${install_location}"/serialbox2/"${compiler}"/python/
 
 # Compare results
-if ! "${install_location}"/serialbox2/serialbox2_v2.5.3/"${compiler}"/python/compare/compare.py -s ".*-out" -w MetaData-Field_rank0.json MetaData-radiation-standalone_rank0.json; then
+if ! "${install_location}"/serialbox2/serialbox2_v2.4.3/"${compiler}"/python/compare/compare.py -s ".*-out" -w MetaData-Field_rank0.json MetaData-radiation-standalone_rank0.json; then
   exit 1
 fi
