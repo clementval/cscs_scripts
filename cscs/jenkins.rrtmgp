@@ -21,12 +21,12 @@ serialbox_dir="${install_location}/serialbox2/serialbox2_v2.4.3/${compiler}"
 # Compary tool
 serialbox_compare="${serialbox_dir}"/python/compare/compare.py
 
-PATH="${install_location}/claw/${compiler}/bin":$PATH
+PATH="${install_location}/claw/master/${compiler}/bin":$PATH
 export PATH
 
 # Show version and env for debugging
-clawfc --version
-clawfc --show-env
+${CLAWFC_PATH} --version
+${CLAWFC_PATH} --show-env
 
 # shellcheck disable=SC2154
 cd claw/rrtmgp/rrtmgp_solver_one_column/build || exit 1
