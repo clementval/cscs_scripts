@@ -1,0 +1,32 @@
+#!/bin/bash -l
+#SBATCH -J f18_branch
+#SBATCH -o output.txt
+#SBATCH -e errors.txt
+#SBATCH -t 00:30:00
+
+#
+
+F18_REPO="https://github.com/flang-compiler/f18.git"
+F18_BRANCH="openacc/parsing"
+F18_WD="f18"
+BUILD_DIR="build"
+
+echo "Running on apachepass"
+
+
+WORKSPACE=$(mktemp -d)
+echo "Workspace: ${WORKSPACE}"
+
+cd ${WORKSPACE} || exit 1
+git clone ${F18_REPO} ${F18_WD}
+cd ${F18_WD} || exit 1
+mkdir ${BUILD_DIR}
+cd ${BUILD_DIR} || exit 1
+echo "Running CMake configuration"
+cmake ..
+
+
+echo "Cleaning workspace ${WORKSPACE}"
+rm -rf ${WORKSPACE}
+
+
