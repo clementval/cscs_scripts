@@ -3,7 +3,7 @@
 # Run shellcheck on all scipts in this repository
 #
 
-for script_dir in ecmwf cscs; do
+for script_dir in ecmwf cscs ornl; do
   for script in ${script_dir}/*; do
     if ! shellcheck "${script}"; then
       echo "${script} failed shellcheck test!"
