@@ -1,3 +1,7 @@
+#
+# Compilation of f18 and llvm
+# author: clementval
+
 FROM ubuntu:18.04
 
 # Update APT
