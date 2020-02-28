@@ -1,17 +1,12 @@
 FROM ubuntu:18.04
 
 # Update APT
+RUN echo "Acquire::http::Proxy \"http://10.40.10.2:3142\";" > /etc/apt/apt.conf
 RUN apt-get update
 
 # Install packages
-RUN apt-get install -y ninja-build
-RUN apt-get install -y git
-RUN apt-get install -y build-essential
-RUN apt-get install -y python3-pip python3-dev
-RUN apt-get install -y wget
-
-# Install OpenSSL
-RUN apt-get install -y libssl-dev
+RUN apt-get install -y ninja-build git build-essential python3-pip python3-dev \
+    wget libssl-dev
 
 # Install latest CMake
 RUN apt-get install -y apt-transport-https ca-certificates gnupg software-properties-common
@@ -19,15 +14,12 @@ RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/nul
 RUN apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
 RUN apt-get update
 RUN apt-get install -y cmake
-#RUN wget https://cmake.org/files/v3.16/cmake-3.16.2.tar.gz
-#RUN tar -xzvf cmake-3.16.2.tar.gz
-#RUN cd cmake-3.16.2 && ./bootstrap && make -j && make install
 
 # Check version of installed packages
 RUN echo "Ninja version: $(ninja --version)"
-RUN git --version
-RUN cmake --version
-RUN gcc --version
+RUN echo "Git version: $(git --version)"
+RUN echo "CMake version: $(cmake --version)"
+RUN echo "GCC version: $(gcc --version)"
 
 # Clone repository
 RUN mkdir workspace
