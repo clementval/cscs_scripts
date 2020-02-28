@@ -10,7 +10,8 @@ RUN apt-get install -y ninja-build git build-essential python3-pip python3-dev \
 
 # Install latest CMake
 RUN apt-get install -y apt-transport-https ca-certificates gnupg software-properties-common
-RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add -
+COPY kiteware.key .
+RUN apt-key add kiteware.key
 RUN apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
 RUN apt-get update
 RUN apt-get install -y cmake
