@@ -9,7 +9,8 @@ RUN apt-get install -y ninja-build git build-essential python3-pip python3-dev \
     wget libssl-dev
 
 # Install latest CMake
-RUN apt-get install -y apt-transport-https ca-certificates gnupg software-properties-common
+RUN apt-get install -y apt-transport-https ca-certificates gnupg \ 
+    software-properties-common
 COPY kiteware.key .
 RUN apt-key add kiteware.key
 RUN apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
@@ -25,11 +26,14 @@ RUN echo "GCC version: $(gcc --version)"
 # Clone repository
 RUN mkdir workspace
 RUN cd workspace || exit 1
-RUN git clone --depth 1 https://github.com/flang-compiler/f18-llvm-project.git -b mono
+RUN git clone --depth 1 https://github.com/flang-compiler/f18-llvm-project.git \
+    -b mono
 RUN git clone --depth 1 https://github.com/schweitzpgi/f18.git -b mono
 RUN cd f18-llvm-project && ln -s ../f18/ flang && cd ..
 RUN mkdir build
 RUN cd build || exit 1
 RUN pwd
-RUN cmake ../f18-llvm-project/llvm -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS="flang;mlir" -DCMAKE_CXX_STANDARD=17 -DLLVM_BUILD_TOOLS=ON -DLLVM_INSTALL_UTILS=ON
+RUN cmake ../f18-llvm-project/llvm -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS="flang;mlir" \
+    -DCMAKE_CXX_STANDARD=17 -DLLVM_BUILD_TOOLS=ON -DLLVM_INSTALL_UTILS=ON
 RUN make -j
