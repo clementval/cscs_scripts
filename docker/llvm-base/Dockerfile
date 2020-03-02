@@ -13,7 +13,7 @@ RUN apt-get update
 
 # Install packages
 RUN apt-get install -y ninja-build git build-essential python3-pip python3-dev \
-    wget libssl-dev
+    wget libssl-dev python2.7 python-pip
 
 # Install latest CMake
 RUN apt-get install -y apt-transport-https ca-certificates gnupg \ 
@@ -33,7 +33,8 @@ RUN echo "GCC version: $(gcc --version)"
 # Build LLVM + MLIR
 RUN git clone --depth 1 https://github.com/llvm/llvm-project.git
 RUN mkdir llvm-project/build || exit 1
-RUN cd llvm-project/build && LDFLAGS="-fuse-ld=gold" cmake -GNinja -DCMAKE_BUILD_TYPE=Release \
+RUN cd llvm-project/build && LDFLAGS="-fuse-ld=gold" cmake -GNinja \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=../install -DLLVM_TARGETS_TO_BUILD=host \
     -DLLVM_ENABLE_PROJECTS="mlir" ../llvm
 RUN cd llvm-project/build && ninja
@@ -43,6 +44,7 @@ RUN git clone --depth 1 https://github.com/flang-compiler/f18.git
 RUN mkdir f18/build || exit 1
 RUN cd f18/build && env CXXFLAGS="-UNDEBUG" LDFLAGS="-fuse-ld=gold" cmake \
     -GNinja -DCMAKE_BUILD_TYPE=Release .. \ 
-    -DLLVM_DIR=/llvm-project/build/lib/cmake/llvm
+    -DLLVM_DIR=/llvm-project/build/lib/cmake/llvm \
+    -DCMAKE_INSTALL_PREFIX=../install
 RUN cd f18/build && ninja
 RUN cd f18/build && ninja check-all
