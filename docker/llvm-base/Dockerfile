@@ -39,16 +39,10 @@ RUN cd llvm-project/build && LDFLAGS="-fuse-ld=gold" cmake -GNinja -DCMAKE_BUILD
 RUN cd llvm-project/build && ninja
 
 # Build f18
-
-
-
-
-# RUN git clone --depth 1 https://github.com/schweitzpgi/f18.git -b mono
-# RUN cd f18-llvm-project && ln -s ../f18/ flang && cd ..
-# RUN mkdir build
-# RUN cd build || exit 1
-# RUN pwd
-# RUN cmake ../f18-llvm-project/llvm -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-#     -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS="flang;mlir" \
-#     -DCMAKE_CXX_STANDARD=17 -DLLVM_BUILD_TOOLS=ON -DLLVM_INSTALL_UTILS=ON
-# RUN make -j
+RUN git clone --depth 1 https://github.com/flang-compiler/f18.git
+RUN mkdir f18/build || exit 1
+RUN cd f18/build && env CXXFLAGS="-UNDEBUG" LDFLAGS="-fuse-ld=gold" cmake \
+    -GNinja -DCMAKE_BUILD_TYPE=Release .. \ 
+    -DLLVM_DIR=/llvm-project/build/lib/cmake/llvm
+RUN cd f18/build && ninja
+RUN cd f18/build && ninja check-all
