@@ -4,6 +4,9 @@
 
 FROM ubuntu:18.04
 
+ENV HTTP_PROXY "http://10.40.10.2:3142"
+ENV HTTPS_PROXY "http://10.40.10.2:3142"
+
 # Update APT
 RUN echo "Acquire::http::Proxy \"http://10.40.10.2:3142\";" > /etc/apt/apt.conf
 RUN apt-get update
@@ -27,17 +30,25 @@ RUN echo "Git version: $(git --version)"
 RUN echo "CMake version: $(cmake --version)"
 RUN echo "GCC version: $(gcc --version)"
 
-# Clone repository
-RUN mkdir workspace
-RUN cd workspace || exit 1
-RUN git clone --depth 1 https://github.com/flang-compiler/f18-llvm-project.git \
-    -b mono
-RUN git clone --depth 1 https://github.com/schweitzpgi/f18.git -b mono
-RUN cd f18-llvm-project && ln -s ../f18/ flang && cd ..
-RUN mkdir build
-RUN cd build || exit 1
-RUN pwd
-RUN cmake ../f18-llvm-project/llvm -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS="flang;mlir" \
-    -DCMAKE_CXX_STANDARD=17 -DLLVM_BUILD_TOOLS=ON -DLLVM_INSTALL_UTILS=ON
-RUN make -j
+# Build LLVM + MLIR
+RUN git clone --depth 1 https://github.com/llvm/llvm-project.git
+RUN mkdir llvm-project/build || exit 1
+RUN cd llvm-project/build && LDFLAGS="-fuse-ld=gold" cmake -GNinja -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=../install -DLLVM_TARGETS_TO_BUILD=host \
+    -DLLVM_ENABLE_PROJECTS="mlir" ../llvm
+RUN cd llvm-project/build && ninja
+
+# Build f18
+
+
+
+
+# RUN git clone --depth 1 https://github.com/schweitzpgi/f18.git -b mono
+# RUN cd f18-llvm-project && ln -s ../f18/ flang && cd ..
+# RUN mkdir build
+# RUN cd build || exit 1
+# RUN pwd
+# RUN cmake ../f18-llvm-project/llvm -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+#     -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS="flang;mlir" \
+#     -DCMAKE_CXX_STANDARD=17 -DLLVM_BUILD_TOOLS=ON -DLLVM_INSTALL_UTILS=ON
+# RUN make -j
